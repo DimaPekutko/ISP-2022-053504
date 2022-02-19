@@ -54,7 +54,7 @@ def grams_count_dict(sents: list, n: int) -> dict:
         for i in range(len(sent)):
             if i+n <= len(sent):
                 for j in range(n):
-                    gram += concat(sent[i+j], " ")
+                    gram += str(concat(sent[i+j], " ")).lower()
                 gram = gram.strip()
                 if gram in grams:
                     grams[gram] += 1
