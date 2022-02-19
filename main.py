@@ -1,4 +1,5 @@
 import json
+import re
 from operator import concat
 from statistics import median, mean
 
@@ -18,24 +19,25 @@ def remove_spec_chars(text: str):
     chars = "@#$%^&*,;:"
     for c in chars:
         text = text.replace(c, "")
-    return text    
+    return text
 
-def split_to_sents_arr(text: str) -> list:
+def split_text_to_sents_arr(text: str) -> list:
     sents = []
-    for sent in remove_spec_chars(text).split("."):
+    text = remove_spec_chars(text)
+    for sent in re.split('\\. |\\! |\\? ', text):
         if len(sent) > 0:
             words = sent.split(" ")
             words = list(filter(len, words))
             sents.append(words)
     return sents
 
-def average_sent_words_count(sents: list[list]) -> int:
+def average_sent_words_count(sents: list) -> int:
     return int(mean([len(sent) for sent in sents]))
 
-def median_sent_words_count(sents: list[list]) -> int:
+def median_sent_words_count(sents: list) -> int:
     return int(median([len(sent) for sent in sents]))
 
-def words_count_dict(sents: list[list]) -> dict[str, int]:
+def words_count_dict(sents: list) -> dict:
     words_dict = {}
     for sent in sents:
         for word in sent:
@@ -45,7 +47,7 @@ def words_count_dict(sents: list[list]) -> dict[str, int]:
                 words_dict[word] = 1
     return words_dict
 
-def grams_count_dict(sents: list[list], n: int) -> dict[str, int]:
+def grams_count_dict(sents: list, n: int) -> dict:
     grams = {}
     for sent in sents:
         gram = ""
@@ -61,7 +63,7 @@ def grams_count_dict(sents: list[list], n: int) -> dict[str, int]:
                 gram = ""
     return grams
 
-def print_result(sents: list[list], k: int, n: int):
+def print_result(sents: list, k: int, n: int):
     words = words_count_dict(sents)
     grams = grams_count_dict(sents, n)
     grams = dict(sorted(grams.items(), key=lambda x:x[1], reverse=True))
@@ -72,18 +74,18 @@ def print_result(sents: list[list], k: int, n: int):
     for word in words:
         print(" {} = {}".format(word, words[word]), end="")
     print()
-    print("Average words count per sentence: {}".format(average_count))
-    print("Median words count per sentence: {}".format(median_count))
+    print("Average words count: {}".format(average_count))
+    print("Median words count: {}".format(median_count))
     print("Top {} {}-grams in text:".format(k, n))
     for i, (key, value) in enumerate(grams.items()):
         if i == k:
             break
-        print(" {} = {}".format(key, value))
+        print(i*" "+" {} = {}".format(key, value))
 
 def main():
     json = read_config()
     k, n, text = int(json["k"]), int(json["n"]), str(json["text"])
-    sents = split_to_sents_arr(text)
+    sents = split_text_to_sents_arr(text)
     print_result(sents, k, n)
 
 if __name__ == "__main__":
