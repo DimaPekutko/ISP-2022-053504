@@ -1,11 +1,13 @@
 from ..Serializer import Serializer
+from .serialize import serialize
+from .deserialize import deserialize
 
 class Serializer_JSON(Serializer):
     def dump(self, obj, file):
         pass
     def dumps(self, obj):
-        pass
+        return serialize(obj)
     def load(self, file):
         pass
     def loads(self, string):
-        pass
+        return deserialize(string)

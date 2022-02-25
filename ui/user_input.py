@@ -2,7 +2,7 @@ import argparse
 from utils import error_exit, get_file_ext
 from libcore.serializer_table import SERIALIZERS
 
-def __check_args(args: dict):
+def _check_args(args: dict):
     # check invalid flags values
     if args["from"] is None or args["to"] is None:
         error_exit("Invalid --from or --to flag")
@@ -20,6 +20,6 @@ def parse_file_paths() -> list:
     parser.add_argument("--from", dest="from", )
     parser.add_argument("--to", dest="to")
     args = parser.parse_args().__dict__
-    __check_args(args)
+    _check_args(args)
     return [args["from"], args["to"]]
     

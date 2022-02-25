@@ -1,0 +1,75 @@
+{
+  "_OBJECT_": {
+    "_CLASS_": {
+      "name": "Some",
+      "dict": {
+        "__init__": {
+          "_FUNC_": {
+            "name": "__init__",
+            "co_argcount": 1,
+            "co_cellvars": [],
+            "co_code": [
+              100, 1, 124, 0, 95, 0, 100, 2, 124, 0, 95, 1, 100, 0, 83, 0
+            ],
+            "co_consts": [null, 3, 33],
+            "co_filename": "/home/dkefir03/labs/isp/ISP-2022-053504/main.py",
+            "co_firstlineno": 11,
+            "co_flags": 67,
+            "co_freevars": [],
+            "co_kwonlyargcount": 0,
+            "co_lnotab": [0, 1, 6, 1],
+            "co_name": "__init__",
+            "co_names": ["a", "some"],
+            "co_nlocals": 1,
+            "co_posonlyargcount": 0,
+            "co_stacksize": 2,
+            "co_varnames": ["self"]
+          }
+        },
+        "r": {
+          "_FUNC_": {
+            "name": "r",
+            "co_argcount": 1,
+            "co_cellvars": [],
+            "co_code": [100, 1, 124, 0, 95, 0, 100, 0, 83, 0],
+            "co_consts": [null, 333],
+            "co_filename": "/home/dkefir03/labs/isp/ISP-2022-053504/main.py",
+            "co_firstlineno": 14,
+            "co_flags": 67,
+            "co_freevars": [],
+            "co_kwonlyargcount": 0,
+            "co_lnotab": [0, 1],
+            "co_name": "r",
+            "co_names": ["a"],
+            "co_nlocals": 1,
+            "co_posonlyargcount": 0,
+            "co_stacksize": 2,
+            "co_varnames": ["self"]
+          }
+        },
+        "MET": {
+          "_FUNC_": {
+            "name": "MET",
+            "co_argcount": 1,
+            "co_cellvars": [],
+            "co_code": [124, 0, 106, 0, 116, 1, 23, 0, 83, 0],
+            "co_consts": [null],
+            "co_filename": "/home/dkefir03/labs/isp/ISP-2022-053504/main.py",
+            "co_firstlineno": 16,
+            "co_flags": 67,
+            "co_freevars": [],
+            "co_kwonlyargcount": 0,
+            "co_lnotab": [0, 1],
+            "co_name": "MET",
+            "co_names": ["a", "var"],
+            "co_nlocals": 1,
+            "co_posonlyargcount": 0,
+            "co_stacksize": 2,
+            "co_varnames": ["self"]
+          }
+        }
+      }
+    },
+    "dict": { "a": 3, "some": 33 }
+  }
+}
