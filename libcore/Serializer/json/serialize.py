@@ -1,11 +1,9 @@
-import types
 import inspect
-import json
 
 JSON_SER_TYPES = {
-    "class": "_CLASS_",
-    "function": "_FUNC_",
-    "object": "_OBJECT_"
+    "class": "@CLASS",
+    "function": "@FUNC",
+    "object": "@OBJECT"
 }
 
 # _STR("}")
@@ -34,7 +32,9 @@ JSON_SER_TYPES = {
 _result_str = ""
 
 def _visit_class(obj):
-    user_members, sys_members = [("__init__", obj.__init__)], []
+    user_members, sys_members = [], []
+    if obj.__init__.__class__.__name__ == "function":
+        user_members.append(("__init__", obj.__init__))
     for mem in obj.__dict__.items():
         if not str(mem[0]).startswith("__"):
             user_members.append(mem)
@@ -42,8 +42,8 @@ def _visit_class(obj):
             sys_members.append(mem)
     # filling class fields 
     _STR(f'"{JSON_SER_TYPES["class"]}":'+"{")
-    _STR(f'"name":"{obj.__name__}",')
-    _STR(f'"dict":'+"{")
+    _STR(f'"@name":"{obj.__name__}",')
+    _STR(f'"@dict":'+"{")
     for i in range(len(user_members)):
         name = user_members[i][0]
         value = user_members[i][1]
@@ -67,17 +67,21 @@ def _visit_function(obj):
     for glob_var in obj.__globals__.items():
         if glob_var[0] in func_code_settings["co_names"]:
             func_globals.update({glob_var[0]: glob_var[1]})
+    # print(func_globals)
     # generating output code
     _STR(f'"{JSON_SER_TYPES["function"]}":'+"{")
-    _STR(f'"name":"{func_name}",')
+    _STR(f'"@name":"{func_name}",')
+    # filling global vars
+    _STR(f'"@globals":'+"{")
+    _visit(func_globals)
+    _STR("},")
     co_fields = list(func_code_settings.items())
     co_fields = [field for field in co_fields if field[0].startswith("co_")]
-    # for co in co_fields:
+    # filling code settings 
     for i in range(len(co_fields)):
         field_name = co_fields[i][0]
         field_value = co_fields[i][1]            
         _STR(f'"{field_name}":')
-        # print(field_name, field_value)
         _visit(field_value)
         if i+1 != len(co_fields):
             _STR(f",")
@@ -88,7 +92,7 @@ def _visit_obj(obj):
     obj_dict = obj.__dict__
     _STR(f'"{JSON_SER_TYPES["object"]}":'+"{")
     _visit(obj_class)
-    _STR(f',"dict":'+"{")
+    _STR(f',"@dict":'+"{")
     _visit(obj_dict)
     _STR("} }")
     pass    
