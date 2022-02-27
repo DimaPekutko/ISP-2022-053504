@@ -10,12 +10,16 @@ import cloudpickle
 
 var = 3
 
+def hello():
+    print("hello")
+    return 2
+
 class Some:
     def __init__(self) -> None:
         self.c = 228
     def some(self):
-        my_var = self.c+2
-        return my_var
+        my_var = self.c+2+var
+        return my_var+hello()
     # def __init__(self):
     #     self.a = 3
     #     self.some = 33

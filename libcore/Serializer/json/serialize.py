@@ -6,29 +6,6 @@ JSON_SER_TYPES = {
     "object": "@OBJECT"
 }
 
-# _STR("}")
-    # code = some_func.__code__
-    # wtf = types.CodeType(
-    #     code.co_argcount,
-    #     code.co_posonlyargcount,
-    #     code.co_kwonlyargcount,
-    #     code.co_nlocals,
-    #     code.co_stacksize,
-    #     code.co_flags,
-    #     bytes(code.co_code),
-    #     code.co_consts,
-    #     code.co_names,
-    #     code.co_varnames,
-    #     code.co_filename,
-    #     "my_test",
-    #     code.co_firstlineno,
-    #     code.co_lnotab,
-    #     code.co_freevars,
-    #     code.co_cellvars
-    # )
-    # my_func = types.FunctionType(wtf, some_func.__globals__, "my_test")
-    # print(my_func(2,3))
-
 _result_str = ""
 
 def _visit_class(obj):
@@ -67,13 +44,13 @@ def _visit_function(obj):
     for glob_var in obj.__globals__.items():
         if glob_var[0] in func_code_settings["co_names"]:
             func_globals.update({glob_var[0]: glob_var[1]})
-    # print(func_globals)
+    print(func_name, obj.__code__.co_nlocals)
     # generating output code
     _STR(f'"{JSON_SER_TYPES["function"]}":'+"{")
     _STR(f'"@name":"{func_name}",')
     # filling global vars
     _STR(f'"@globals":'+"{")
-    _visit(func_globals)
+    _visit(func_globals, True)
     _STR("},")
     co_fields = list(func_code_settings.items())
     co_fields = [field for field in co_fields if field[0].startswith("co_")]
@@ -97,7 +74,7 @@ def _visit_obj(obj):
     _STR("} }")
     pass    
 
-def _visit(obj: any):
+def _visit(obj, addit_braces = False):
     _type = type(obj)
     if obj is None:
         _STR("null")
@@ -106,7 +83,12 @@ def _visit(obj: any):
         _visit_class(obj)
     # function case
     elif callable(obj):
-        _visit_function(obj)
+        if addit_braces:
+            _STR("{")
+            _visit_function(obj)
+            _STR("}")
+        else:
+            _visit_function(obj)
     # primitive types case
     elif _type in (int, float):
         _STR(f"{obj}")
@@ -116,14 +98,14 @@ def _visit(obj: any):
         items = list(obj.items())
         for i in range(len(items)):
             _STR(f'"{items[i][0]}":')
-            _visit(items[i][1])
+            _visit(items[i][1], addit_braces)
             if i+1 != len(items):
                 _STR(f",")
     elif _type in (tuple, list, set):
         _STR(f"[")
         for i in range(len(obj)):
             if not inspect.isclass(obj[i]):
-                _visit(obj[i])
+                _visit(obj[i], addit_braces)
                 if i+1 != len(obj):
                     _STR(f",")
         _STR(f"]")
@@ -139,6 +121,6 @@ def _STR(s: str):
 
 def serialize(obj: any):
     _STR("{")
-    _visit(obj)
+    _visit(obj, True)
     _STR("}")
     return _result_str

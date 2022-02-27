@@ -20,6 +20,10 @@ def _parse_obj(obj_dict: dict):
 def _parse_func(func_dict):
     func_name = func_dict["@name"]
     func_globals = func_dict["@globals"]
+    for glob in func_globals.items():
+        if type(glob[1]) is dict:
+            if JSON_SER_TYPES["function"] in glob[1]:
+                func_globals[glob[0]] = _parse_func(glob[1][JSON_SER_TYPES["function"]])
     code_type =  types.CodeType(
         func_dict["co_argcount"],
         func_dict["co_posonlyargcount"],
