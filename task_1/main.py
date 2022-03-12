@@ -3,10 +3,10 @@ import re
 from operator import concat
 from statistics import median, mean
 
-CONFIG_PATH = "/home/dkefir03/labs/data.json"
+CONFIG_PATH = "/data.json"
 
 
-def read_config():
+def read_config() -> str:
     try:
         file = open(CONFIG_PATH)
     except FileNotFoundError:
@@ -17,7 +17,7 @@ def read_config():
     return data
 
 
-def remove_spec_chars(text: str):
+def remove_spec_chars(text: str) -> str:
     chars = "@#$%^&*,;:"
     for c in chars:
         text = text.replace(c, "")
@@ -77,14 +77,17 @@ def print_result(sents: list, k: int, n: int):
     grams = dict(sorted(grams.items(), key=lambda x: x[1], reverse=True))
     average_count = average_sent_words_count(sents)
     median_count = median_sent_words_count(sents)
+
     print("Text readed from {}\n".format(CONFIG_PATH))
     print("Words repeat count:")
+    
     for word in words:
         print(" {} = {}".format(word, words[word]), end="")
-    print()
-    print("Average words count: {}".format(average_count))
+    
+    print("\nAverage words count: {}".format(average_count))
     print("Median words count: {}".format(median_count))
     print("Top {} {}-grams in text:".format(k, n))
+    
     for i, (key, value) in enumerate(grams.items()):
         if i == k:
             break
