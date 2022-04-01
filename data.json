@@ -1,1 +1,29 @@
-{"@OBJECT":{"@CLASS":{"@name":"Some","@dict":{"__init__":{"@FUNC":{"@name":"__init__","@globals":{},"co_argcount":1,"co_cellvars":[],"co_code":[100, 1, 124, 0, 95, 0, 100, 0, 83, 0],"co_consts":[null,228],"co_filename":"/home/dkefir03/labs/ISP-2022-053504/main.py","co_firstlineno":18,"co_flags":67,"co_freevars":[],"co_kwonlyargcount":0,"co_lnotab":[0, 1],"co_name":"__init__","co_names":["c"],"co_nlocals":1,"co_posonlyargcount":0,"co_stacksize":2,"co_varnames":["self"]}},"some":{"@FUNC":{"@name":"some","@globals":{"var":3,"hello":{"@FUNC":{"@name":"hello","@globals":{},"co_argcount":0,"co_cellvars":[],"co_code":[116, 0, 100, 1, 131, 1, 1, 0, 100, 2, 83, 0],"co_consts":[null,"hello",2],"co_filename":"/home/dkefir03/labs/ISP-2022-053504/main.py","co_firstlineno":13,"co_flags":67,"co_freevars":[],"co_kwonlyargcount":0,"co_lnotab":[0, 1, 8, 1],"co_name":"hello","co_names":["print"],"co_nlocals":0,"co_posonlyargcount":0,"co_stacksize":2,"co_varnames":[]}}},"co_argcount":1,"co_cellvars":[],"co_code":[124, 0, 106, 0, 100, 1, 23, 0, 116, 1, 23, 0, 125, 1, 124, 1, 116, 2, 131, 0, 23, 0, 83, 0],"co_consts":[null,2],"co_filename":"/home/dkefir03/labs/ISP-2022-053504/main.py","co_firstlineno":20,"co_flags":67,"co_freevars":[],"co_kwonlyargcount":0,"co_lnotab":[0, 1, 14, 1],"co_name":"some","co_names":["c","var","hello"],"co_nlocals":2,"co_posonlyargcount":0,"co_stacksize":2,"co_varnames":["self","my_var"]}}} },"@dict":{"c":230} }}
+{
+  "DTO_TYPE": "func",
+  "name": "test",
+  "globals": {},
+  "code": {
+    "co_argcount": { "DTO_TYPE": "literal", "value": 0 },
+    "co_cellvars": { "DTO_TYPE": "tuple", "value": [] },
+    "co_code": { "DTO_TYPE": "literal", "value": "b'ZAFTAA=='" },
+    "co_consts": {
+      "DTO_TYPE": "tuple",
+      "value": [{}, { "DTO_TYPE": "literal", "value": 2 }]
+    },
+    "co_filename": {
+      "DTO_TYPE": "literal",
+      "value": "/home/dkefir03/labs/ISP-2022-053504/main.py"
+    },
+    "co_firstlineno": { "DTO_TYPE": "literal", "value": 3 },
+    "co_flags": { "DTO_TYPE": "literal", "value": 67 },
+    "co_freevars": { "DTO_TYPE": "tuple", "value": [] },
+    "co_kwonlyargcount": { "DTO_TYPE": "literal", "value": 0 },
+    "co_lnotab": { "DTO_TYPE": "literal", "value": "b'AAE='" },
+    "co_name": { "DTO_TYPE": "literal", "value": "test" },
+    "co_names": { "DTO_TYPE": "tuple", "value": [] },
+    "co_nlocals": { "DTO_TYPE": "literal", "value": 0 },
+    "co_posonlyargcount": { "DTO_TYPE": "literal", "value": 0 },
+    "co_stacksize": { "DTO_TYPE": "literal", "value": 1 },
+    "co_varnames": { "DTO_TYPE": "tuple", "value": [] }
+  }
+}
