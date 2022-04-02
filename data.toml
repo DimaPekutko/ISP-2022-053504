@@ -1,0 +1,37 @@
+[base]
+hello = 228
+
+[base.a]
+b = 3
+c = "hello"
+
+[base.a.d]
+
+[base.a.d.a]
+DTO_TYPE = "func"
+name = "test"
+
+[base.a.d.a.globals]
+glob = 2
+
+[base.a.d.a.code]
+co_argcount = 1
+co_cellvars = []
+co_code = "64017400170064011700640114005300"
+co_consts = [{},2]
+co_filename = "/home/dkefir03/labs/ISP-2022-053504/main.py"
+co_firstlineno = 21
+co_flags = 67
+co_freevars = []
+co_kwonlyargcount = 0
+co_lnotab = "0003"
+co_name = "test"
+co_names = ["glob"]
+co_nlocals = 1
+co_posonlyargcount = 0
+co_stacksize = 2
+co_varnames = ["arg1"]
+
+
+
+

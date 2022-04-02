@@ -1,21 +1,14 @@
-from pekutko_serializer import JsonSerializer
+from pekutko_serializer import JsonSerializer, TomlSerializer
 
 import mod_test
 
 from mod_test import from_val
 
-glob = 2
 
+glob = 2
 
 def some():
     return 2
-
-
-def factorial(n: int) -> int:
-    if n <= 1:
-        return 1
-    else:
-        return n*factorial(n-1)
 
 
 class TestClass():
@@ -31,16 +24,32 @@ def test(arg1):
     return (2+glob+2)*2
 
 
-json_ser = JsonSerializer()
+toml_ser = TomlSerializer()
 
-obj = TestClass(c=228)
+test_dict = {
+    "hello": 228,
+    "a": {
+        "b": 3,
+        "c": "hello",
+        "d": {
+            "a": test
+        }
+    }
+}
+
+s = toml_ser.dumps(test_dict)
+
+open("data.toml", "w").write(s)
+
+
+# json_ser = JsonSerializer()
+# obj = TestClass(c=228)
 # obj.a = 3
-
 # print(obj)
-s = json_ser.dumps(obj)
-open("data.json", "w").write(s)
+# s = json_ser.dumps(obj)
+# open("data.json", "w").write(s)
 # exit()
 # exit()
 # # exit()
-res = json_ser.loads(s)
-print(res.b)
+# res = json_ser.loads(s)
+# print(res.b)
