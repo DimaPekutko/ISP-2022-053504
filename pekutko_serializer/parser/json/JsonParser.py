@@ -4,7 +4,7 @@ import re
 from types import CodeType, FunctionType, ModuleType
 
 from pekutko_serializer.dto import DTO, DTO_TYPES
-import pekutko_serializer.parser.json.json_tokens as JSON_TOKENS
+import pekutko_serializer.parser.common_tokens as TOKEN_TYPES
 
 
 class JsonParser():
@@ -24,20 +24,20 @@ class JsonParser():
     def _lex(self, source: str) -> list:
         tokens = []
         while len(source) > 0:
-            for token in JSON_TOKENS.JSON_TOKEN_REGEXPS.items():
+            for token in TOKEN_TYPES.TOKEN_REGEXPS.items():
                 try:
                     regexp_res = re.match(token[1], source)
                     if regexp_res.start() == 0:
                         source = str(
                             source[regexp_res.end()-regexp_res.start():]).strip()
-                        if token[0] == JSON_TOKENS.STR:
+                        if token[0] == TOKEN_TYPES.STR:
                             string = regexp_res.group(0)
                             tokens.append((token[0], string.replace('"', "")))
-                        elif token[0] == JSON_TOKENS.NUMBER:
+                        elif token[0] == TOKEN_TYPES.NUMBER:
                             num = regexp_res.group(0)
                             num = float(num) if "." in num else int(num)
                             tokens.append((token[0], num))
-                        elif token[0] == JSON_TOKENS.BOOL:
+                        elif token[0] == TOKEN_TYPES.BOOL:
                             res = True if token[1] == "true" else False
                             tokens.append((token[0], res))
                         else:
@@ -48,9 +48,9 @@ class JsonParser():
 
     def _skip_field_name(self, comma: bool = False) -> str:
         if comma:
-            self._eat(JSON_TOKENS.COMMA)
-        field_key = self._eat(JSON_TOKENS.STR)
-        self._eat(JSON_TOKENS.COLON)
+            self._eat(TOKEN_TYPES.COMMA)
+        field_key = self._eat(TOKEN_TYPES.STR)
+        self._eat(TOKEN_TYPES.COLON)
         return field_key[1]
 
     def _parse_func_code(self) -> CodeType:
@@ -134,7 +134,7 @@ class JsonParser():
     def _parse_dict(self):
         _dict = {}
         is_first = True
-        while self._head_token()[0] != JSON_TOKENS.RBRACE:
+        while self._head_token()[0] != TOKEN_TYPES.RBRACE:
             co_key = self._skip_field_name(not is_first)
             co_value = self._parse()
             _dict.update({co_key: co_value})
@@ -143,44 +143,44 @@ class JsonParser():
 
     def _parse_list(self) -> list:
         self._skip_field_name()
-        self._eat(JSON_TOKENS.LBRACKET)
+        self._eat(TOKEN_TYPES.LBRACKET)
         _list = []
         is_first = True
-        while self._head_token()[0] != JSON_TOKENS.RBRACKET:
+        while self._head_token()[0] != TOKEN_TYPES.RBRACKET:
             # print(is_first)
             if not is_first:
-                self._eat(JSON_TOKENS.COMMA)
+                self._eat(TOKEN_TYPES.COMMA)
             _list.append(self._parse())
             is_first = False
-        self._eat(JSON_TOKENS.RBRACKET)
+        self._eat(TOKEN_TYPES.RBRACKET)
         return _list
 
     def _parse_primitive(self) -> any:
         token_type = self._head_token()[0]
         res = None
-        if token_type == JSON_TOKENS.NUMBER:
-            res = self._eat(JSON_TOKENS.NUMBER)[1]
-        elif token_type == JSON_TOKENS.STR:
-            res = self._eat(JSON_TOKENS.STR)[1]
-        elif token_type == JSON_TOKENS.BOOL:
-            res = self._eat(JSON_TOKENS.BOOL)[1]
-        elif token_type in JSON_TOKENS.LBRACKET:
+        if token_type == TOKEN_TYPES.NUMBER:
+            res = self._eat(TOKEN_TYPES.NUMBER)[1]
+        elif token_type == TOKEN_TYPES.STR:
+            res = self._eat(TOKEN_TYPES.STR)[1]
+        elif token_type == TOKEN_TYPES.BOOL:
+            res = self._eat(TOKEN_TYPES.BOOL)[1]
+        elif token_type in TOKEN_TYPES.LBRACKET:
             res = self._parse_list()
-        if self._head_token()[0] == JSON_TOKENS.COMMA:
-            self._eat(JSON_TOKENS.COMMA)
+        if self._head_token()[0] == TOKEN_TYPES.COMMA:
+            self._eat(TOKEN_TYPES.COMMA)
         return res
 
     def _parse_dto(self):
-        self._eat(JSON_TOKENS.LBRACE)
+        self._eat(TOKEN_TYPES.LBRACE)
 
-        if self._head_token()[0] == JSON_TOKENS.RBRACE:
-            self._eat(JSON_TOKENS.RBRACE)
+        if self._head_token()[0] == TOKEN_TYPES.RBRACE:
+            self._eat(TOKEN_TYPES.RBRACE)
             return None
 
-        dto_type_key = self._eat(JSON_TOKENS.STR)
-        self._eat(JSON_TOKENS.COLON)
-        dto_type_value = self._eat(JSON_TOKENS.STR)
-        self._eat(JSON_TOKENS.COMMA)
+        dto_type_key = self._eat(TOKEN_TYPES.STR)
+        self._eat(TOKEN_TYPES.COLON)
+        dto_type_value = self._eat(TOKEN_TYPES.STR)
+        self._eat(TOKEN_TYPES.COMMA)
 
         res_dto = None
 
@@ -199,12 +199,12 @@ class JsonParser():
             raise Exception(
                 f"Field '{DTO.dto_type}' must be on top of the json object")
 
-        self._eat(JSON_TOKENS.RBRACE)
+        self._eat(TOKEN_TYPES.RBRACE)
         return res_dto
 
     def _parse(self) -> any:
         head_token_type = self._head_token()[0]
-        if head_token_type == JSON_TOKENS.LBRACE:
+        if head_token_type == TOKEN_TYPES.LBRACE:
             return self._parse_dto()
         return self._parse_primitive()
 

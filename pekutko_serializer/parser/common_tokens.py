@@ -9,7 +9,7 @@ COLON = "colon"
 COMMA = "comma"
 
 
-JSON_TOKEN_REGEXPS = {
+TOKEN_REGEXPS = {
     LBRACE: r"{",
     RBRACE: r"}",
     LBRACKET: "\\[",

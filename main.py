@@ -33,7 +33,7 @@ def test(arg1):
 
 json_ser = JsonSerializer()
 
-obj = TestClass(2)
+obj = TestClass(c=228)
 # obj.a = 3
 
 # print(obj)
