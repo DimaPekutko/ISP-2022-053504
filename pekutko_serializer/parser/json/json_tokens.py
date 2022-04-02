@@ -4,6 +4,7 @@ LBRACKET = "lbracket"
 RBRACKET = "rbracket"
 STR = "str"
 NUMBER = "number"
+BOOL = "bool"
 COLON = "colon"
 COMMA = "comma"
 
@@ -15,6 +16,7 @@ JSON_TOKEN_REGEXPS = {
     RBRACKET: "\\]",
     STR: r'"[^"]*"',
     NUMBER: r'([0-9]*[.])?[0-9]+',
+    BOOL: r'^(?:tru|fals)e',
     COLON: r":",
     COMMA: r",",
 }

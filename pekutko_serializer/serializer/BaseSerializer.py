@@ -4,13 +4,13 @@ from abc import ABC, abstractmethod
 class BaseSerializer(ABC):
     @abstractmethod
     def dumps(self, obj: any) -> str:
-        pass
+        """ this method is too abstract to understand. """
     @abstractmethod
     def dump(self, obj: any, file_path: str):
-        pass
+        """ this method is too abstract to understand. """
     @abstractmethod
     def loads(self, source: str) -> any:
-        pass
+        """ this method is too abstract to understand. """
     @abstractmethod
     def load(self, file_path: str) -> any:
-        pass
+        """ this method is too abstract to understand. """

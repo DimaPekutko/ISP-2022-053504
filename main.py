@@ -1,4 +1,3 @@
-import inspect
 from pekutko_serializer import JsonSerializer
 
 import mod_test
@@ -12,23 +11,21 @@ def some():
     return 2
 
 
-class TestClass():
-    a = mod_test.from_val
-    __dw__ = 2
+def factorial(n: int) -> int:
+    if n <= 1:
+        return 1
+    else:
+        return n*factorial(n-1)
 
-    def __init__(self):
-        pass
+
+class TestClass():
+    b = "hello"
 
 
 def test():
     a = mod_test.from_val
     b = some()
-    q = a + b
-    d = mod_test.from_module("hey")
-    c = 32
-    r = mod_test.glob
-    r += q
-    return 2+glob+r
+    return (2+glob+b)*a
 
 
 json_ser = JsonSerializer()
@@ -43,4 +40,4 @@ open("data.json", "w").write(s)
 # exit()
 # # exit()
 res = json_ser.loads(s)
-print(res())
+print(res)

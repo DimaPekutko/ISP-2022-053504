@@ -36,6 +36,9 @@ class JsonParser():
                             num = regexp_res.group(0)
                             num = float(num) if "." in num else int(num)
                             tokens.append((token[0], num))
+                        elif token[0] == JSON_TOKENS.BOOL:
+                            res = True if token[1] == "true" else False
+                            tokens.append((token[0], res))
                         else:
                             tokens.append((token[0],))
                 except:
@@ -155,6 +158,8 @@ class JsonParser():
             res = self._eat(JSON_TOKENS.NUMBER)[1]
         elif token_type == JSON_TOKENS.STR:
             res = self._eat(JSON_TOKENS.STR)[1]
+        elif token_type == JSON_TOKENS.BOOL:
+            res = self._eat(JSON_TOKENS.BOOL)[1]
         elif token_type in JSON_TOKENS.LBRACKET:
             res = self._parse_list()
         if self._head_token()[0] == JSON_TOKENS.COMMA:

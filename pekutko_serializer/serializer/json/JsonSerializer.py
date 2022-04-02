@@ -114,6 +114,9 @@ class JsonSerializer(BaseSerializer):
             self._put(f'{prim_obj}')
         elif _type == str:
             self._put(f'"{prim_obj}"')
+        elif _type == bool:
+            val = "true" if prim_obj else "false"
+            self._put(f'{val}')
         elif _type in (list, tuple):
             self._put('[')
             for i, obj in enumerate(prim_obj):
