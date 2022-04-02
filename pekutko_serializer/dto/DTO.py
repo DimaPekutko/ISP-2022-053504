@@ -15,4 +15,4 @@ class DTO():
     fields = "fields"
     code = "code"
     global_names = "globals"
-    based_class = "based_class"
+    base_class = "class"

@@ -74,6 +74,15 @@ class JsonSerializer(BaseSerializer):
                     fields_dict.update({mem[0]:mem[1]})
         self._visit(fields_dict)
 
+    def _visit_obj(self, obj):
+        # print(obj)
+        self._put(f'"{DTO.dto_type}": "{DTO_TYPES.OBJ}",')
+        self._put(f'"{DTO.base_class}": ')
+        self._visit(obj.__class__)        
+        self._put(",")
+        self._put(f'"{DTO.fields}": ')
+        self._visit(obj.__dict__)
+
     def _visit_dict(self, _dict: dict):
         self._put(f'"{DTO.dto_type}": "{DTO_TYPES.DICT}"')
         if len(_dict.items()) >= 1:
@@ -116,4 +125,6 @@ class JsonSerializer(BaseSerializer):
                 self._visit_class(obj)
             elif callable(obj):
                 self._visit_func(obj)
+            elif isinstance(obj, object):
+                self._visit_obj(obj)
             self._put('}')

@@ -96,6 +96,18 @@ class JsonParser():
         _class = type(class_name, (object,), class_members_dict)
         return _class
 
+    def _parse_obj(self) -> object:
+        # class
+        self._skip_field_name()
+        _class = self._parse()
+        # fields
+        self._skip_field_name(comma=True)
+        fields_dict = self._parse()
+
+        obj = _class()
+        obj.__dict__ = fields_dict
+        return obj
+
     def _parse_dict(self):
         _dict = {}
         is_first = True
@@ -154,6 +166,8 @@ class JsonParser():
                 res_dto = self._parse_func()
             elif dto_type_value[1] == DTO_TYPES.CLASS:
                 res_dto = self._parse_class()
+            elif dto_type_value[1] == DTO_TYPES.OBJ:
+                res_dto = self._parse_obj()
         else:
             raise Exception(
                 f"Field '{DTO.dto_type}' must be on top of the json object")

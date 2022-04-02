@@ -7,7 +7,7 @@ class TestClass():
     a = 32
     __dw__ = 2
     def __init__(self):
-        print(self.a, self.__dw__)
+        pass
 
 def test():
     print("hello")
@@ -22,11 +22,15 @@ json_ser = JsonSerializer()
 #     }
 # })
 
-s = json_ser.dumps(TestClass)
+obj = TestClass()
+obj.a = 3
+# print(obj)
+
+s = json_ser.dumps(obj)
 
 open("data.json", "w").write(s)
 # exit()
 # exit()
 # # exit()
 res = json_ser.loads(s)
-print(res())
+print(res.a)
