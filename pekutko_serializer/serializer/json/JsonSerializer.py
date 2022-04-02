@@ -1,4 +1,5 @@
 import inspect
+from types import BuiltinFunctionType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, WrapperDescriptorType
 from ..BaseSerializer import BaseSerializer
 from pekutko_serializer.parser.json.JsonParser import JsonParser
 from pekutko_serializer.dto import DTO, DTO_TYPES
@@ -36,7 +37,7 @@ class JsonSerializer(BaseSerializer):
         for glob in func_globals:
             if glob[0] in code.co_names:
                 actual_globals.update({glob[0]: glob[1]})
-        self._visit_dict(actual_globals)
+        self._visit(actual_globals)
 
     def _visit_func_code(self, func):
         code = func.__code__
@@ -44,7 +45,7 @@ class JsonSerializer(BaseSerializer):
         for member in inspect.getmembers(code):
             if str(member[0]).startswith("co_"):
                 code_dict.update({member[0]: member[1]})
-        self._visit_dict(code_dict)
+        self._visit(code_dict)
 
     def _visit_func(self, func):
         self._put(f'"{DTO.dto_type}": "{DTO_TYPES.FUNC}",')
@@ -55,8 +56,25 @@ class JsonSerializer(BaseSerializer):
         self._put(f'"{DTO.code}": ')
         self._visit_func_code(func)
 
+    def _visit_class(self, _class):
+        self._put(f'"{DTO.dto_type}": "{DTO_TYPES.CLASS}",')
+        self._put(f'"{DTO.name}": "{_class.__name__}",')
+        self._put(f'"{DTO.fields}": ')
+        mems = inspect.getmembers(_class)
+        fields_dict = {}
+        for mem in mems:
+            if type(mem[1]) not in (
+                WrapperDescriptorType,
+                MethodDescriptorType,
+                BuiltinFunctionType,
+                MappingProxyType,
+                GetSetDescriptorType
+            ):
+                if mem[1] != None and mem[1] != type:
+                    fields_dict.update({mem[0]:mem[1]})
+        self._visit(fields_dict)
+
     def _visit_dict(self, _dict: dict):
-        self._put('{')
         self._put(f'"{DTO.dto_type}": "{DTO_TYPES.DICT}"')
         if len(_dict.items()) >= 1:
             self._put(",")
@@ -67,7 +85,6 @@ class JsonSerializer(BaseSerializer):
             self._put(f'"{item[0]}": ')
             self._visit(item[1])
             is_first = False
-        self._put('}')
 
     def _visit_primitive(self, prim_obj):
         _type = type(prim_obj)
@@ -89,11 +106,14 @@ class JsonSerializer(BaseSerializer):
     def _visit(self, obj):
         if type(obj) in (int, float, str, bool, bytes, tuple, list):
             self._visit_primitive(obj)
-        elif type(obj) == dict:
-            self._visit_dict(obj)
-        elif callable(obj):
-            self._put("{")
-            self._visit_func(obj)
-            self._put("}")
         elif obj == None:
             self._put('{}')
+        else:
+            self._put('{')
+            if type(obj) == dict:
+                self._visit_dict(obj)
+            elif inspect.isclass(obj):
+                self._visit_class(obj)
+            elif callable(obj):
+                self._visit_func(obj)
+            self._put('}')

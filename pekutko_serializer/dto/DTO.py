@@ -12,7 +12,7 @@ class DTO_TYPES():
 class DTO():
     dto_type = "DTO_TYPE"
     name = "name"
-    value = "value"
+    fields = "fields"
     code = "code"
     global_names = "globals"
     based_class = "based_class"

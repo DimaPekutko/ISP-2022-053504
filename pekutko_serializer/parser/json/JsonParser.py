@@ -85,6 +85,17 @@ class JsonParser():
         func.__globals__["__builtins__"] = __import__("builtins")
         return func
 
+    def _parse_class(self) -> type:
+        # name
+        self._skip_field_name()
+        class_name = self._parse()
+        # fields
+        self._skip_field_name(comma=True)
+        class_members_dict = self._parse()
+
+        _class = type(class_name, (object,), class_members_dict)
+        return _class
+
     def _parse_dict(self):
         _dict = {}
         is_first = True
@@ -94,32 +105,6 @@ class JsonParser():
             _dict.update({co_key: co_value})
             is_first = False
         return _dict
-
-    def _parse_dto(self):
-        self._eat(JSON_TOKENS.LBRACE)
-
-        if self._head_token()[0] == JSON_TOKENS.RBRACE:
-            self._eat(JSON_TOKENS.RBRACE)
-            return None
-
-        dto_type_key = self._eat(JSON_TOKENS.STR)
-        self._eat(JSON_TOKENS.COLON)
-        dto_type_value = self._eat(JSON_TOKENS.STR)
-        self._eat(JSON_TOKENS.COMMA)
-
-        res_dto = None
-
-        if dto_type_key[1] == DTO.dto_type:
-            if dto_type_value[1] == DTO_TYPES.FUNC:
-                res_dto = self._parse_func()
-            elif dto_type_value[1] == DTO_TYPES.DICT:
-                res_dto = self._parse_dict()
-        else:
-            raise Exception(
-                f"Field '{DTO.dto_type}' must be on top of the json object")
-
-        self._eat(JSON_TOKENS.RBRACE)
-        return res_dto
 
     def _parse_list(self) -> list:
         self._skip_field_name()
@@ -147,6 +132,34 @@ class JsonParser():
         if self._head_token()[0] == JSON_TOKENS.COMMA:
             self._eat(JSON_TOKENS.COMMA)
         return res
+
+    def _parse_dto(self):
+        self._eat(JSON_TOKENS.LBRACE)
+
+        if self._head_token()[0] == JSON_TOKENS.RBRACE:
+            self._eat(JSON_TOKENS.RBRACE)
+            return None
+
+        dto_type_key = self._eat(JSON_TOKENS.STR)
+        self._eat(JSON_TOKENS.COLON)
+        dto_type_value = self._eat(JSON_TOKENS.STR)
+        self._eat(JSON_TOKENS.COMMA)
+
+        res_dto = None
+
+        if dto_type_key[1] == DTO.dto_type:
+            if dto_type_value[1] == DTO_TYPES.DICT:
+                res_dto = self._parse_dict()
+            elif dto_type_value[1] == DTO_TYPES.FUNC:
+                res_dto = self._parse_func()
+            elif dto_type_value[1] == DTO_TYPES.CLASS:
+                res_dto = self._parse_class()
+        else:
+            raise Exception(
+                f"Field '{DTO.dto_type}' must be on top of the json object")
+
+        self._eat(JSON_TOKENS.RBRACE)
+        return res_dto
 
     def _parse(self) -> any:
         head_token_type = self._head_token()[0]

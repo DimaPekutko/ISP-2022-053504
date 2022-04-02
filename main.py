@@ -1,6 +1,13 @@
+import inspect
 from pekutko_serializer import JsonSerializer
 
 glob = 2
+
+class TestClass():
+    a = 32
+    __dw__ = 2
+    def __init__(self):
+        print(self.a, self.__dw__)
 
 def test():
     print("hello")
@@ -15,9 +22,10 @@ json_ser = JsonSerializer()
 #     }
 # })
 
-s = json_ser.dumps(test)
+s = json_ser.dumps(TestClass)
 
 open("data.json", "w").write(s)
+# exit()
 # exit()
 # # exit()
 res = json_ser.loads(s)
