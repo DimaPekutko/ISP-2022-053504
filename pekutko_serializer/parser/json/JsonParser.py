@@ -1,6 +1,7 @@
-import base64
+import imp
+import importlib
 import re
-from types import CodeType, FunctionType
+from types import CodeType, FunctionType, ModuleType
 from pekutko_serializer.dto import DTO, DTO_TYPES
 import pekutko_serializer.parser.json.json_tokens as JSON_TOKENS
 
@@ -77,6 +78,7 @@ class JsonParser():
         # globals
         self._skip_field_name(comma=True)
         func_globals = self._parse()
+        # exit()
         # code
         self._skip_field_name(comma=True)
         func_code = self._parse_func_code()
@@ -84,6 +86,20 @@ class JsonParser():
         func = FunctionType(func_code, func_globals, func_name)
         func.__globals__["__builtins__"] = __import__("builtins")
         return func
+
+    def _parse_module(self) -> ModuleType:
+        # name
+        self._skip_field_name()
+        module_name = self._parse()
+        # fields
+        self._skip_field_name(comma=True)
+        module_fields = self._parse()
+
+        module = imp.new_module(module_name)
+        # module["__dict__"] = module_fields
+        for field in module_fields.items():
+            setattr(module,field[0],field[1])
+        return module
 
     def _parse_class(self) -> type:
         # name
@@ -164,6 +180,8 @@ class JsonParser():
                 res_dto = self._parse_dict()
             elif dto_type_value[1] == DTO_TYPES.FUNC:
                 res_dto = self._parse_func()
+            elif dto_type_value[1] == DTO_TYPES.MODULE:
+                res_dto = self._parse_module()
             elif dto_type_value[1] == DTO_TYPES.CLASS:
                 res_dto = self._parse_class()
             elif dto_type_value[1] == DTO_TYPES.OBJ:

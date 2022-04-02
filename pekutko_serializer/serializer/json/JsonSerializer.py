@@ -1,5 +1,7 @@
+from ast import Module
+import imp
 import inspect
-from types import BuiltinFunctionType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, WrapperDescriptorType
+from types import BuiltinFunctionType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
 from ..BaseSerializer import BaseSerializer
 from pekutko_serializer.parser.json.JsonParser import JsonParser
 from pekutko_serializer.dto import DTO, DTO_TYPES
@@ -56,6 +58,17 @@ class JsonSerializer(BaseSerializer):
         self._put(f'"{DTO.code}": ')
         self._visit_func_code(func)
 
+    def _visit_module(self, module):
+        module_fields = {}
+        self._put(f'"{DTO.dto_type}": "{DTO_TYPES.MODULE}",')
+        self._put(f'"{DTO.name}": "{module.__name__}",')
+        self._put(f'"{DTO.fields}": ')
+        module_members = inspect.getmembers(module)
+        for mem in module_members:
+            if not mem[0].startswith("__"):
+                module_fields.update({mem[0]: mem[1]})
+        self._visit(module_fields)
+
     def _visit_class(self, _class):
         self._put(f'"{DTO.dto_type}": "{DTO_TYPES.CLASS}",')
         self._put(f'"{DTO.name}": "{_class.__name__}",')
@@ -71,14 +84,14 @@ class JsonSerializer(BaseSerializer):
                 GetSetDescriptorType
             ):
                 if mem[1] != None and mem[1] != type:
-                    fields_dict.update({mem[0]:mem[1]})
+                    fields_dict.update({mem[0]: mem[1]})
         self._visit(fields_dict)
 
     def _visit_obj(self, obj):
         # print(obj)
         self._put(f'"{DTO.dto_type}": "{DTO_TYPES.OBJ}",')
         self._put(f'"{DTO.base_class}": ')
-        self._visit(obj.__class__)        
+        self._visit(obj.__class__)
         self._put(",")
         self._put(f'"{DTO.fields}": ')
         self._visit(obj.__dict__)
@@ -121,6 +134,8 @@ class JsonSerializer(BaseSerializer):
             self._put('{')
             if type(obj) == dict:
                 self._visit_dict(obj)
+            elif type(obj) == ModuleType:
+                self._visit_module(obj)
             elif inspect.isclass(obj):
                 self._visit_class(obj)
             elif callable(obj):
