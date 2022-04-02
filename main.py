@@ -19,25 +19,28 @@ def factorial(n: int) -> int:
 
 
 class TestClass():
-    b = "hello"
+    b = 28
+    def __init__(self, c):
+        self.b = c
+        print(f"new {self.__class__.__name__} object")
 
 
-def test():
-    a = mod_test.from_val
-    b = some()
-    return (2+glob+b)*a
+def test(arg1):
+    # a = mod_test.from_val
+    # b = some()
+    return (2+glob+2)*2
 
 
 json_ser = JsonSerializer()
 
-obj = TestClass()
+obj = TestClass(2)
 # obj.a = 3
 
 # print(obj)
-s = json_ser.dumps(test)
+s = json_ser.dumps(obj)
 open("data.json", "w").write(s)
 # exit()
 # exit()
 # # exit()
 res = json_ser.loads(s)
-print(res)
+print(res.b)

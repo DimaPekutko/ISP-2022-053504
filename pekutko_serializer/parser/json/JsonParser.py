@@ -1,7 +1,8 @@
 import imp
-import importlib
+import inspect
 import re
 from types import CodeType, FunctionType, ModuleType
+
 from pekutko_serializer.dto import DTO, DTO_TYPES
 import pekutko_serializer.parser.json.json_tokens as JSON_TOKENS
 
@@ -123,7 +124,10 @@ class JsonParser():
         self._skip_field_name(comma=True)
         fields_dict = self._parse()
 
+        class_init = _class.__init__
+        delattr(_class, "__init__")
         obj = _class()
+        obj.__init__ = class_init
         obj.__dict__ = fields_dict
         return obj
 
