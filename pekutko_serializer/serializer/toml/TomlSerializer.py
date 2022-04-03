@@ -57,9 +57,9 @@ class TomlSerializer(BaseSerializer):
         complex_dict = {}
         for item in _dict.items():
             if self._is_primitive_type(item[1]):
-                prim_dict.update({item[0]:item[1]})
+                prim_dict.update({item[0]: item[1]})
             else:
-                complex_dict.update({item[0]:item[1]})
+                complex_dict.update({item[0]: item[1]})
         return prim_dict, complex_dict
 
     def _visit_func_globals(self, func):
@@ -87,50 +87,52 @@ class TomlSerializer(BaseSerializer):
         pass
 
     def _visit_module(self, module):
-        # module_fields = {}
-        # self._put(f'"{DTO.dto_type}": "{DTO_TYPES.MODULE}",')
-        # self._put(f'"{DTO.name}": "{module.__name__}",')
-        # self._put(f'"{DTO.fields}": ')
-        # module_members = inspect.getmembers(module)
-        # for mem in module_members:
-        #     if not mem[0].startswith("__"):
-        #         module_fields.update({mem[0]: mem[1]})
-        # self._visit(module_fields)
-        pass
+        module_fields = {}
+        self._put(f'{DTO.dto_type} = "{DTO_TYPES.MODULE}"\n')
+        self._put(f'{DTO.name} = "{module.__name__}"\n\n')
+        module_members = inspect.getmembers(module)
+        for mem in module_members:
+            if not mem[0].startswith("__"):
+                module_fields.update({mem[0]: mem[1]})
+        self._visit(module_fields, DTO.fields)
 
     def _visit_class(self, _class):
-        # self._put(f'"{DTO.dto_type}": "{DTO_TYPES.CLASS}",')
-        # self._put(f'"{DTO.name}": "{_class.__name__}",')
+        self._put(f'{DTO.dto_type} = "{DTO_TYPES.CLASS}"\n')
+        self._put(f'{DTO.name} = "{_class.__name__}"\n\n')
         # self._put(f'"{DTO.fields}": ')
-        # mems = inspect.getmembers(_class)
-        # fields_dict = {}
-        # for mem in mems:
-        #     if type(mem[1]) not in (
-        #         WrapperDescriptorType,
-        #         MethodDescriptorType,
-        #         BuiltinFunctionType,
-        #         MappingProxyType,
-        #         GetSetDescriptorType
-        #     ):
-        #         if mem[1] != None and mem[1] != type:
-        #             fields_dict.update({mem[0]: mem[1]})
-        # self._visit(fields_dict)
+        mems = inspect.getmembers(_class)
+        fields_dict = {}
+        for mem in mems:
+            if type(mem[1]) not in (
+                WrapperDescriptorType,
+                MethodDescriptorType,
+                BuiltinFunctionType,
+                MappingProxyType,
+                GetSetDescriptorType
+            ):
+                if mem[1] != None and mem[1] != type:
+                    fields_dict.update({mem[0]: mem[1]})
+        self._visit(fields_dict, DTO.fields)
         pass
 
     def _visit_obj(self, obj):
-        # # print(obj)
-        # self._put(f'"{DTO.dto_type}": "{DTO_TYPES.OBJ}",')base
+        # print(obj)
+        self._put(f'{DTO.dto_type} =  "{DTO_TYPES.OBJ}"\n\n')
+        self._visit(obj.__class__, DTO.base_class)
+        self._visit(obj.__dict__, DTO.fields)
         pass
 
     def _visit_dict(self, _dict: dict):
         # sorting dict to set primitive fields at the begining
         prim_dict, complex_dict = self._divide_dict_by_primitive(_dict)
-        
+
+        self._put(f'{DTO.dto_type} = "{DTO_TYPES.DICT}"\n')
+
         for prim in prim_dict.items():
             self._put(f'{prim[0]} = ')
             self._visit(prim[1])
             self._put("\n")
-        
+
         self._put("\n")
 
         for comp in complex_dict.items():
@@ -157,15 +159,18 @@ class TomlSerializer(BaseSerializer):
             encoded = prim_obj.hex()
             self._put(f'"{encoded}"')
 
-    def _visit(self, obj, new_name: str = "base"):
+    def _visit(self, obj, new_name: str = ""):
         if type(obj) in (int, float, str, bool, bytes, tuple, list):
             self._visit_primitive(obj)
         elif obj == None:
             self._put('{}')
         else:
-            self._push_name(new_name)
-            name = self._get_concat_name()
-            self._put(f'[{name}]\n')
+
+            if len(new_name):
+                self._push_name(new_name)
+                name = self._get_concat_name()
+                self._put(f'[{name}]\n')
+
             if type(obj) == dict:
                 self._visit_dict(obj)
             elif type(obj) == ModuleType:
@@ -176,4 +181,6 @@ class TomlSerializer(BaseSerializer):
                 self._visit_func(obj)
             elif isinstance(obj, object):
                 self._visit_obj(obj)
-            self._pop_name()
+
+            if len(new_name):
+                self._pop_name()

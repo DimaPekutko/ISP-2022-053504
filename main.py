@@ -19,17 +19,18 @@ class TestClass():
 
 
 def test(arg1):
-    # a = mod_test.from_val
+    a = mod_test.from_val
     # b = some()
     return (2+glob+2)*2
 
 
 toml_ser = TomlSerializer()
+json_ser = JsonSerializer()
 
 test_dict = {
     "hello": 228,
     "a": {
-        "b": 3,
+        "b": True,
         "c": "hello",
         "d": {
             "a": test
@@ -37,9 +38,15 @@ test_dict = {
     }
 }
 
-s = toml_ser.dumps(test_dict)
+obj = test
+
+obj.b = 228
+
+s = toml_ser.dumps(obj)
+s2 = json_ser.dumps(obj)
 
 open("data.toml", "w").write(s)
+open("data.json", "w").write(s2)
 
 
 # json_ser = JsonSerializer()
@@ -47,7 +54,6 @@ open("data.toml", "w").write(s)
 # obj.a = 3
 # print(obj)
 # s = json_ser.dumps(obj)
-# open("data.json", "w").write(s)
 # exit()
 # exit()
 # # exit()
