@@ -8,6 +8,7 @@ class DTO_TYPES():
     CLASS = "class"
     OBJ = "obj"
     DICT = "dict"
+    MIRROR_DICT = "mirror_dict"
 
 @dataclass
 class DTO():

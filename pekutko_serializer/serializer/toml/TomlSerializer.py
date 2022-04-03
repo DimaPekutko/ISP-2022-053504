@@ -159,28 +159,32 @@ class TomlSerializer(BaseSerializer):
             encoded = prim_obj.hex()
             self._put(f'"{encoded}"')
 
+    def _visit_list(self, obj: any, container_name: str):
+        print(obj)
+        pass
+
+    def _visit_complex(self, comp_obj: any, container_name: str):
+        self._push_name(container_name)
+        name = self._get_concat_name()
+        self._put(f'[{name}]\n')
+
+        if type(comp_obj) == dict:
+            self._visit_dict(comp_obj)
+        elif type(comp_obj) == ModuleType:
+            self._visit_module(comp_obj)
+        elif inspect.isclass(comp_obj):
+            self._visit_class(comp_obj)
+        elif callable(comp_obj):
+            self._visit_func(comp_obj)
+        elif isinstance(comp_obj, object):
+            self._visit_obj(comp_obj)
+
+        self._pop_name()
+
     def _visit(self, obj, new_name: str = ""):
-        if type(obj) in (int, float, str, bool, bytes, tuple, list):
+        if self._is_primitive_type(obj):
             self._visit_primitive(obj)
-        elif obj == None:
-            self._put('{}')
+        elif type(obj) in (tuple, list):
+            self._visit_list(obj, new_name)
         else:
-
-            if len(new_name):
-                self._push_name(new_name)
-                name = self._get_concat_name()
-                self._put(f'[{name}]\n')
-
-            if type(obj) == dict:
-                self._visit_dict(obj)
-            elif type(obj) == ModuleType:
-                self._visit_module(obj)
-            elif inspect.isclass(obj):
-                self._visit_class(obj)
-            elif callable(obj):
-                self._visit_func(obj)
-            elif isinstance(obj, object):
-                self._visit_obj(obj)
-
-            if len(new_name):
-                self._pop_name()
+            self._visit_complex(obj, new_name)

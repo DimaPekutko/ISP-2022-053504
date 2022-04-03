@@ -128,7 +128,9 @@ class JsonParser():
         fields_dict = self._parse()
 
         class_init = _class.__init__
-        delattr(_class, "__init__")
+        if callable(class_init):
+            if class_init.__class__.__name__ == "function":
+                delattr(_class, "__init__")
         obj = _class()
         obj.__init__ = class_init
         obj.__dict__ = fields_dict
