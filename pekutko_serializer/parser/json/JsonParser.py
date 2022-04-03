@@ -25,6 +25,8 @@ class JsonParser():
         tokens = []
         while len(source) > 0:
             for token in TOKEN_TYPES.TOKEN_REGEXPS.items():
+                if token[0] == TOKEN_TYPES.EOF:
+                    continue
                 try:
                     regexp_res = re.match(token[1], source)
                     if regexp_res.start() == 0:
@@ -44,6 +46,7 @@ class JsonParser():
                             tokens.append((token[0],))
                 except:
                     None
+        tokens.append((TOKEN_TYPES.EOF,))
         return tokens
 
     def _skip_field_name(self, comma: bool = False) -> str:

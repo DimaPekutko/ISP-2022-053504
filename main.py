@@ -48,7 +48,6 @@ s2 = json_ser.dumps(obj)
 open("data.toml", "w").write(s)
 open("data.json", "w").write(s2)
 
-
 # json_ser = JsonSerializer()
 # obj = TestClass(c=228)
 # obj.a = 3

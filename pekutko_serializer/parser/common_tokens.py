@@ -7,7 +7,7 @@ NUMBER = "number"
 BOOL = "bool"
 COLON = "colon"
 COMMA = "comma"
-
+EOF = "EOF"
 
 TOKEN_REGEXPS = {
     LBRACE: r"{",
@@ -19,4 +19,5 @@ TOKEN_REGEXPS = {
     BOOL: r'^(?:tru|fals)e',
     COLON: r":",
     COMMA: r",",
+    EOF: "EOF"
 }
