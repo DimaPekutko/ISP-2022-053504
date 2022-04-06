@@ -54,13 +54,27 @@ def closure228():
 
     return insome
 
-f = inspect.getmembers(closure228)
+class Meta228(type):
+    s = 33
+    def __new__(cls, name, bases, dct):
+        print("ya")
+        return type(name, bases,dct)
+
+# class Some(metaclass=Meta228):
+#     pass
+
+# for m in inspect.getmembers(Some):
+#     print(m)
+
+# f = inspect.getmembers(closure228)
 # for r in f:
     # print(r)
 # exit()
-obj = closure228
 
-# obj.b = 228
+class ccc(metaclass=Meta228):
+    pass
+
+obj = Meta228
 
 # s = toml_ser.dumps(obj)
 s2 = json_ser.dumps(obj)
@@ -73,7 +87,7 @@ open("data.json", "w").write(s2)
 # res = yaml_ser.loads(s2)
 
 res = json_ser.loads(s2)
-print(res()())
+print(res)
 
 
 # json_ser = JsonSerializer()

@@ -119,8 +119,10 @@ class JsonParser():
         self._skip_field_name(comma=True)
         class_members_dict = self._parse()
 
-        _class = type(class_name, (object,), class_members_dict)
-        return _class
+        class_bases = (object,)
+        if "__bases__" in class_members_dict:
+            class_bases = tuple(class_members_dict["__bases__"])
+        return type(class_name, class_bases, class_members_dict)
 
     def _parse_obj(self) -> object:
         # class
