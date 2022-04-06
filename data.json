@@ -10,7 +10,7 @@
         "fields": { "DTO_TYPE": "dict", "__bases__": [] }
       }
     ],
-    "__doc__": {},
+    "__doc__": null,
     "__module__": "__main__",
     "__new__": {
       "DTO_TYPE": "func",
@@ -23,7 +23,7 @@
           "co_argcount": 4,
           "co_cellvars": [],
           "co_code": "740064018301010074017c017c027c0383035300",
-          "co_consts": [{}, "ya"],
+          "co_consts": [null, "ya"],
           "co_filename": "/home/dkefir03/labs/ISP-2022-053504/main.py",
           "co_firstlineno": 59,
           "co_flags": 67,

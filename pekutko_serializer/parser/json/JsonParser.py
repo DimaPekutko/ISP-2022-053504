@@ -35,6 +35,8 @@ class JsonParser():
                         if token[0] == TOKEN_TYPES.STR:
                             string = regexp_res.group(0)
                             tokens.append((token[0], string.replace('"', "")))
+                        elif token[0] == TOKEN_TYPES.NULL:
+                            tokens.append((token[0], None))
                         elif token[0] == TOKEN_TYPES.NUMBER:
                             num = regexp_res.group(0)
                             num = float(num) if "." in num else int(num)
@@ -172,6 +174,8 @@ class JsonParser():
             res = self._eat(TOKEN_TYPES.NUMBER)[1]
         elif token_type == TOKEN_TYPES.STR:
             res = self._eat(TOKEN_TYPES.STR)[1]
+        elif token_type == TOKEN_TYPES.NULL:
+            res = self._eat(TOKEN_TYPES.NULL)[1]
         elif token_type == TOKEN_TYPES.BOOL:
             res = self._eat(TOKEN_TYPES.BOOL)[1]
         elif token_type in TOKEN_TYPES.LBRACKET:
@@ -222,5 +226,4 @@ class JsonParser():
 
     def parse(self, s: str) -> any:
         self.__tokens = self._lex(s)
-        # exit()
         return self._parse()

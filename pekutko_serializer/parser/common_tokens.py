@@ -2,6 +2,7 @@ LBRACE = "lbrace"
 RBRACE = "rbrace"
 LBRACKET = "lbracket"
 RBRACKET = "rbracket"
+NULL = "null"
 STR = "str"
 NUMBER = "number"
 BOOL = "bool"
@@ -14,6 +15,7 @@ TOKEN_REGEXPS = {
     RBRACE: r"}",
     LBRACKET: "\\[",
     RBRACKET: "\\]",
+    NULL: r'null',
     STR: r'"[^"]*"',
     NUMBER: r'([0-9]*[.])?[0-9]+',
     BOOL: r'^(?:tru|fals)e',

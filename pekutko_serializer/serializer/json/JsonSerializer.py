@@ -143,7 +143,7 @@ class JsonSerializer(BaseSerializer):
         if type(obj) in (int, float, str, bool, bytes, tuple, list):
             self._visit_primitive(obj)
         elif obj == None:
-            self._put('{}')
+            self._put('null')
         else:
             self._put('{')
             if type(obj) == dict:
