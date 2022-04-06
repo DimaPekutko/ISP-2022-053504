@@ -5,6 +5,8 @@ from types import BuiltinFunctionType, GetSetDescriptorType, MappingProxyType, M
 from pekutko_serializer.dto import DTO, DTO_TYPES
 
 from ..BaseSerializer import BaseSerializer
+from pekutko_serializer.parser.yaml import YamlParser
+
 
 
 class YamlSerializer(BaseSerializer):
@@ -15,7 +17,7 @@ class YamlSerializer(BaseSerializer):
 
     def __init__(self):
         super().__init__()
-        # self.__parser = JsonParser()
+        self.__parser = YamlParser()
 
     def dumps(self, obj: any) -> str:
         self.__res_str = ""
@@ -66,8 +68,8 @@ class YamlSerializer(BaseSerializer):
         self._visit(code_dict)
 
     def _visit_func(self, func):
-        self._put(f'{DTO.dto_type}: {DTO_TYPES.FUNC}\n', gaps=True)
-        self._put(f'{DTO.name}: {func.__name__}\n', gaps=True)
+        self._put(f'{DTO.dto_type}: "{DTO_TYPES.FUNC}"\n', gaps=True)
+        self._put(f'{DTO.name}: "{func.__name__}"\n', gaps=True)
         self._put(f'{DTO.global_names}:', gaps=True)
         self._visit_func_globals(func)
         self._put(f'{DTO.code}:', gaps=True)
@@ -75,8 +77,8 @@ class YamlSerializer(BaseSerializer):
 
     def _visit_module(self, module):
         module_fields = {}
-        self._put(f'{DTO.dto_type}: {DTO_TYPES.MODULE}\n', gaps=True)
-        self._put(f'{DTO.name}: {module.__name__}\n', gaps=True)
+        self._put(f'{DTO.dto_type}: "{DTO_TYPES.MODULE}"\n', gaps=True)
+        self._put(f'{DTO.name}: "{module.__name__}"\n', gaps=True)
         self._put(f'{DTO.fields}:', gaps=True)
         module_members = inspect.getmembers(module)
         for mem in module_members:
@@ -85,8 +87,8 @@ class YamlSerializer(BaseSerializer):
         self._visit(module_fields)
 
     def _visit_class(self, _class):
-        self._put(f'{DTO.dto_type}: {DTO_TYPES.CLASS}\n', gaps=True)
-        self._put(f'{DTO.name}: {_class.__name__}\n', gaps=True)
+        self._put(f'{DTO.dto_type}: "{DTO_TYPES.CLASS}"\n', gaps=True)
+        self._put(f'{DTO.name}: "{_class.__name__}"\n', gaps=True)
         self._put(f'{DTO.fields}:', gaps=True)
         mems = inspect.getmembers(_class)
         fields_dict = {}
@@ -103,14 +105,14 @@ class YamlSerializer(BaseSerializer):
         self._visit(fields_dict)
 
     def _visit_obj(self, obj):
-        self._put(f'{DTO.dto_type}: {DTO_TYPES.OBJ}\n', gaps=True)
+        self._put(f'{DTO.dto_type}: "{DTO_TYPES.OBJ}"\n', gaps=True)
         self._put(f'{DTO.base_class}:', gaps=True)
         self._visit(obj.__class__)
         self._put(f'{DTO.fields}:', gaps=True)
         self._visit(obj.__dict__)
 
     def _visit_dict(self, _dict: dict):
-        self._put(f'{DTO.dto_type}: {DTO_TYPES.DICT}\n', gaps=True)
+        self._put(f'{DTO.dto_type}: "{DTO_TYPES.DICT}"\n', gaps=True)
         for item in _dict.items():
             self._put(f'{item[0]}: ', gaps=True)
             # self._push_gap()
@@ -119,16 +121,16 @@ class YamlSerializer(BaseSerializer):
             # self._pop_gap()
 
     def _visit_list(self, _list: list):
-        # self._push_gap("")
-        for item in _list:
-            self._put("- ", gaps=True)
-            # self._push_gap()
-            if not self._is_primitive_type(item):
-                self._block_gaps()
-            self._visit(item, new_line=False)
-            # self._pop_gap()
-            self._put("\n")
-        # self._push_gap()
+        if len(_list) >= 1:
+            for item in _list:
+                self._put("- ", gaps=True)
+                if not self._is_primitive_type(item):
+                    self._block_gaps()
+                self._visit(item, new_line=False)
+                self._put("\n")
+        else:
+            self.__res_str = self.__res_str[:-1]
+            self._put("[]")        
 
     def _is_primitive_type(self, obj: any):
         return type(obj) in (int, float, str, bool, bytes)
@@ -138,7 +140,7 @@ class YamlSerializer(BaseSerializer):
         if _type in (int, float):
             self._put(f'{prim_obj}')
         elif _type == str:
-            self._put(f'{prim_obj}')
+            self._put(f'"{prim_obj}"')
         elif _type == bool:
             val = "true" if prim_obj else "false"
             self._put(f'{val}')
@@ -152,7 +154,7 @@ class YamlSerializer(BaseSerializer):
         if self._is_primitive_type(obj):
             self._visit_primitive(obj)
         elif obj == None:
-            self._put('{}')
+            self._put('null')
         else:
             if len(self.__gaps) >= 1 and new_line:
                 self._put("\n")

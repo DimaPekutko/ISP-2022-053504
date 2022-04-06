@@ -1,7 +1,7 @@
 from ast import Module
 import imp
 import inspect
-from types import BuiltinFunctionType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
+from types import BuiltinFunctionType, CodeType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
 from ..BaseSerializer import BaseSerializer
 from pekutko_serializer.parser.json.JsonParser import JsonParser
 from pekutko_serializer.dto import DTO, DTO_TYPES
@@ -41,10 +41,11 @@ class JsonSerializer(BaseSerializer):
                 actual_globals.update({glob[0]: glob[1]})
         self._visit(actual_globals)
 
-    def _visit_func_code(self, func):
-        code = func.__code__
+    def _visit_func_code(self, _code: CodeType):
+        self._put(f'"{DTO.dto_type}": "{DTO_TYPES.CODE}",')
+        self._put(f'"{DTO.fields}":')
         code_dict = {}
-        for member in inspect.getmembers(code):
+        for member in inspect.getmembers(_code):
             if str(member[0]).startswith("co_"):
                 code_dict.update({member[0]: member[1]})
         self._visit(code_dict)
@@ -56,7 +57,7 @@ class JsonSerializer(BaseSerializer):
         self._visit_func_globals(func)
         self._put(',')
         self._put(f'"{DTO.code}": ')
-        self._visit_func_code(func)
+        self._visit(func.__code__)
 
     def _visit_module(self, module):
         module_fields = {}
@@ -137,6 +138,8 @@ class JsonSerializer(BaseSerializer):
             self._put('{')
             if type(obj) == dict:
                 self._visit_dict(obj)
+            elif type(obj) == CodeType:
+                self._visit_func_code(obj)
             elif type(obj) == ModuleType:
                 self._visit_module(obj)
             elif inspect.isclass(obj):

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class DTO_TYPES():
     FUNC = "func"
+    CODE = "code"
     MODULE = "module"
     CLASS = "class"
     OBJ = "obj"

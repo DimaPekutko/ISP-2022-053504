@@ -40,7 +40,8 @@ class JsonParser():
                             num = float(num) if "." in num else int(num)
                             tokens.append((token[0], num))
                         elif token[0] == TOKEN_TYPES.BOOL:
-                            res = True if token[1] == "true" else False
+                            _bool = regexp_res.group(0)
+                            res = True if _bool == "true" else False
                             tokens.append((token[0], res))
                         else:
                             tokens.append((token[0],))
@@ -57,6 +58,7 @@ class JsonParser():
         return field_key[1]
 
     def _parse_func_code(self) -> CodeType:
+        self._skip_field_name(comma=True)
         code_dict = self._parse()
         func_code = CodeType(
             int(code_dict["co_argcount"]),
@@ -79,6 +81,7 @@ class JsonParser():
         return func_code
 
     def _parse_func(self) -> any:
+        # exit()
         # name
         self._skip_field_name()
         func_name = self._parse()
@@ -88,7 +91,7 @@ class JsonParser():
         # exit()
         # code
         self._skip_field_name(comma=True)
-        func_code = self._parse_func_code()
+        func_code = self._parse()
 
         func = FunctionType(func_code, func_globals, func_name)
         func.__globals__["__builtins__"] = __import__("builtins")
@@ -194,6 +197,8 @@ class JsonParser():
                 res_dto = self._parse_dict()
             elif dto_type_value[1] == DTO_TYPES.FUNC:
                 res_dto = self._parse_func()
+            elif dto_type_value[1] == DTO_TYPES.CODE:
+                res_dto = self._parse_func_code()
             elif dto_type_value[1] == DTO_TYPES.MODULE:
                 res_dto = self._parse_module()
             elif dto_type_value[1] == DTO_TYPES.CLASS:
@@ -215,4 +220,5 @@ class JsonParser():
 
     def parse(self, s: str) -> any:
         self.__tokens = self._lex(s)
+        # exit()
         return self._parse()

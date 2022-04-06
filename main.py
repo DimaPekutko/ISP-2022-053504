@@ -1,3 +1,4 @@
+import inspect
 import yaml
 import toml
 import json
@@ -25,7 +26,7 @@ class TestClass():
 
 
 def test(arg1):
-    a = mod_test.from_val
+    # a = mod_test.from_val
     # b = some()
     return (2+glob+2)*2
 
@@ -35,39 +36,50 @@ json_ser = JsonSerializer()
 yaml_ser = YamlSerializer()
 
 test_dict = {
-    "type": "dict",
-    "globals": {
-        "a": 3
+    "a": 228,
+    "b": {
+        "c": 3,
+        "d": "hello",
+        "e": True
     },
-    "b": [[
-        {
-          "type": "dict",
-          "s": 2
-          }],
-          4
-          ],
-    "someone":{
-        "ua": "hello"
+    "f": {
+        "hello": 2,
+        "some": 3.14
     }
 }
 
-obj = test
+def closure228():
+    def insome():
+        return 2
+
+    return insome
+
+f = inspect.getmembers(closure228)
+# for r in f:
+    # print(r)
+# exit()
+obj = closure228
 
 # obj.b = 228
 
 # s = toml_ser.dumps(obj)
-# s2 = json_ser.dumps(obj)
-s3 = yaml_ser.dumps(obj)
+s2 = json_ser.dumps(obj)
+# s3 = yaml_ser.dumps(obj)
 
-open("data.yaml", "w").write(s3)
+# open("data.yaml", "w").write(s3)
 # open("data.toml", "w").write(toml.dumps(obj))
-# open("data.json", "w").write(json.dumps(obj))
+open("data.json", "w").write(s2)
+
+# res = yaml_ser.loads(s2)
+
+res = json_ser.loads(s2)
+print(res()())
+
 
 # json_ser = JsonSerializer()
 # obj = TestClass(c=228)
 # obj.a = 3
 # print(obj)
-# s = json_ser.dumps(obj)
 # exit()
 # exit()
 # # exit()
