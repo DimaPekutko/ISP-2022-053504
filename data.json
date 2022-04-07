@@ -1,1 +1,5 @@
-{"DTO_TYPE": "dict","a": 228,"b": {"DTO_TYPE": "dict","c": 3,"d": "hello","e": true},"wtf": [{"DTO_TYPE": "dict","c": 33},3.14],"f": {"DTO_TYPE": "dict","hello": 2,"some": 3.14}}
+{
+  "DTO_TYPE": "class",
+  "name": "ccc",
+  "fields": { "DTO_TYPE": "dict", "__doc__": null, "__module__": "__main__" }
+}

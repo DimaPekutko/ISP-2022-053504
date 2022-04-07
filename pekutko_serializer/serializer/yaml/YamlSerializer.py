@@ -92,21 +92,27 @@ class YamlSerializer(BaseSerializer):
         self._put(f'{DTO.fields}:', gaps=True)
         mems = inspect.getmembers(_class)
         fields_dict = {}
-        for mem in mems:
-            if type(mem[1]) not in (
-                WrapperDescriptorType,
-                MethodDescriptorType,
-                BuiltinFunctionType,
-                MappingProxyType,
-                GetSetDescriptorType
-            ):
-                if mem[0] not in (
-                    "__mro__", "__base__", "__basicsize__",
-                    "__class__", "__dictoffset__", "__name__",
-                    "__qualname__", "__text_signature__", "__itemsize__",
-                    "__flags__", "__weakrefoffset__"
+        if _class == type:
+            fields_dict.update({
+                "__bases__": [],
+            })
+        else:
+            mems = inspect.getmembers(_class)
+            for mem in mems:
+                if type(mem[1]) not in (
+                    WrapperDescriptorType,
+                    MethodDescriptorType,
+                    BuiltinFunctionType,
+                    MappingProxyType,
+                    GetSetDescriptorType
                 ):
-                    fields_dict.update({mem[0]: mem[1]})
+                    if mem[0] not in (
+                        "__mro__", "__base__", "__basicsize__",
+                        "__class__", "__dictoffset__", "__name__",
+                        "__qualname__", "__text_signature__", "__itemsize__",
+                        "__flags__", "__weakrefoffset__"
+                    ):
+                        fields_dict.update({mem[0]: mem[1]})
         self._visit(fields_dict)
 
     def _visit_obj(self, obj):

@@ -19,14 +19,12 @@ def some():
 class TestClass():
     b = 28
 
-    def __init__(self, c):
-        self.b = c
-        a = 3
-        print(f"new {self.__class__.__name__} object")
+    def __init__(self):
+        pass
 
 
 def test(arg1):
-    # a = mod_test.from_val
+    a = mod_test.from_val
     # b = some()
     return (2+glob+2)*2
 
@@ -73,7 +71,7 @@ class Meta228(type):
 class ccc(metaclass=Meta228):
     pass
 
-obj = test
+obj = TestClass()
 
 # s = toml_ser.dumps(obj)
 # s2 = json_ser.dumps(obj)

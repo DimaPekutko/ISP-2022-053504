@@ -1,29 +1,38 @@
-DTO_TYPE: "func"
-name: "test"
-globals:
-  DTO_TYPE: "dict"
-  glob: 2
-code: 
-  DTO_TYPE: "code"
+DTO_TYPE: "obj"
+class:
+  DTO_TYPE: "class"
+  name: "TestClass"
   fields:
     DTO_TYPE: "dict"
-    co_argcount: 1
-    co_cellvars: []
-    co_code: "64017400170064011700640114005300"
-    co_consts: 
-      - null
-      - 2
-    co_filename: "/home/dkefir03/labs/ISP-2022-053504/main.py"
-    co_firstlineno: 28
-    co_flags: 67
-    co_freevars: []
-    co_kwonlyargcount: 0
-    co_lnotab: "0003"
-    co_name: "test"
-    co_names: 
-      - "glob"
-    co_nlocals: 1
-    co_posonlyargcount: 0
-    co_stacksize: 2
-    co_varnames: 
-      - "arg1"
+    __doc__: null
+    __init__: 
+      DTO_TYPE: "func"
+      name: "__init__"
+      globals:
+        DTO_TYPE: "dict"
+      code: 
+        DTO_TYPE: "code"
+        fields:
+          DTO_TYPE: "dict"
+          co_argcount: 1
+          co_cellvars: []
+          co_code: "64005300"
+          co_consts: 
+            - null
+          co_filename: "/home/dkefir03/labs/ISP-2022-053504/main.py"
+          co_firstlineno: 22
+          co_flags: 67
+          co_freevars: []
+          co_kwonlyargcount: 0
+          co_lnotab: "0001"
+          co_name: "__init__"
+          co_names: []
+          co_nlocals: 1
+          co_posonlyargcount: 0
+          co_stacksize: 1
+          co_varnames: 
+            - "self"
+    __module__: "__main__"
+    b: 28
+fields:
+  DTO_TYPE: "dict"

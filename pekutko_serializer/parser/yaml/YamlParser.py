@@ -62,8 +62,10 @@ class YamlParser():
             print(token)
 
     def _skip_field_name(self) -> str:
+        self._skip_gaps()
         field_key = self._eat(TOKEN_TYPES.FIELD_STR)
         self._eat(TOKEN_TYPES.COLON)
+        self._skip_gaps()
         return field_key[1]
 
     def _peek_gaps_count(self) -> int:
@@ -86,12 +88,12 @@ class YamlParser():
 
     def _parse_func_code(self) -> CodeType:
         self._push_gap()
-
-        self._skip_gaps()
+        # fields
         self._skip_field_name()
-        self._skip_gaps()
         code_dict = self._parse()
+
         self._pop_gap()
+
         func_code = CodeType(
             int(code_dict["co_argcount"]),
             int(code_dict["co_posonlyargcount"]),
@@ -119,13 +121,13 @@ class YamlParser():
         func_name = self._parse()
         # globals
         self._skip_field_name()
-        self._skip_gaps()
         func_globals = self._parse()
         # code
         self._skip_field_name()
-        self._skip_gaps()
         func_code = self._parse()
-
+        
+        # print(func_name, func_globals, func_code)
+        # exit()
         self._pop_gap()
         # print()
         # exit()
@@ -134,54 +136,65 @@ class YamlParser():
         func.__globals__["__builtins__"] = __import__("builtins")
         return func
 
-    # def _parse_module(self) -> ModuleType:
-    #     # name
-    #     self._skip_field_name()
-    #     module_name = self._parse()
-    #     # fields
-    #     self._skip_field_name(comma=True)
-    #     module_fields = self._parse()
+    def _parse_module(self) -> ModuleType:
+        self._push_gap()
+        # name
+        self._skip_field_name()
+        module_name = self._parse()
+        # fields
+        self._skip_field_name()
+        module_fields = self._parse()
 
-    #     module = imp.new_module(module_name)
-    #     # module["__dict__"] = module_fields
-    #     for field in module_fields.items():
-    #         setattr(module,field[0],field[1])
-    #     return module
+        self._pop_gap()
 
-    # def _parse_class(self) -> type:
-    #     # name
-    #     self._skip_field_name()
-    #     class_name = self._parse()
-    #     # fields
-    #     self._skip_field_name(comma=True)
-    #     class_members_dict = self._parse()
+        module = imp.new_module(module_name)
+        # module["__dict__"] = module_fields
+        for field in module_fields.items():
+            setattr(module,field[0],field[1])
+        return module
 
-    #     _class = type(class_name, (object,), class_members_dict)
-    #     return _class
+    def _parse_class(self) -> type:
+        self._push_gap()
+        # name
+        self._skip_field_name()
+        class_name = self._parse()
+        # fields
+        self._skip_field_name()
+        class_members_dict = self._parse()
 
-    # def _parse_obj(self) -> object:
-    #     # class
-    #     self._skip_field_name()
-    #     _class = self._parse()
-    #     # fields
-    #     self._skip_field_name(comma=True)
-    #     fields_dict = self._parse()
+        # print(class_members_dict)
+        # exit()
+        self._pop_gap()
 
-    #     class_init = _class.__init__
-    #     if callable(class_init):
-    #         if class_init.__class__.__name__ == "function":
-    #             delattr(_class, "__init__")
-    #     obj = _class()
-    #     obj.__init__ = class_init
-    #     obj.__dict__ = fields_dict
-    #     return obj
+        class_bases = (object,)
+        if "__bases__" in class_members_dict:
+            class_bases = tuple(class_members_dict["__bases__"])
+        return type(class_name, class_bases, class_members_dict)
+
+    def _parse_obj(self) -> object:
+        self._push_gap()
+        # class
+        self._skip_field_name()
+        _class = self._parse()
+        # fields
+        self._skip_field_name()
+        fields_dict = self._parse()
+        self._pop_gap()
+
+        class_init = _class.__init__
+        if callable(class_init):
+            if class_init.__class__.__name__ == "function":
+                delattr(_class, "__init__")
+        obj = _class()
+        obj.__init__ = class_init
+        obj.__dict__ = fields_dict
+        return obj
 
     def _parse_dict(self):
         _dict = {}
         start_gaps_count = self.__cur_gaps_count
         self._push_gap()
         while self._peek_gaps_count() == start_gaps_count and self._head_token()[0] != TOKEN_TYPES.EOF:
-            self._skip_gaps()
             co_key = self._skip_field_name()
             co_value = self._parse()
             _dict.update({co_key: co_value})
@@ -193,7 +206,6 @@ class YamlParser():
         start_gaps_count = self.__cur_gaps_count
         self._push_gap()
         while self._peek_gaps_count() == start_gaps_count and self._head_token()[0] != TOKEN_TYPES.EOF:
-            self._dump_tokens()
             self._skip_gaps()
             self._eat(TOKEN_TYPES.ARR_DASH)
             element = self._parse()
@@ -235,10 +247,10 @@ class YamlParser():
                 res_dto = self._parse_func_code()
             elif dto_type_value[1] == DTO_TYPES.MODULE:
                 res_dto = self._parse_module()
-    #         elif dto_type_value[1] == DTO_TYPES.CLASS:
-    #             res_dto = self._parse_class()
-    #         elif dto_type_value[1] == DTO_TYPES.OBJ:
-    #             res_dto = self._parse_obj()
+            elif dto_type_value[1] == DTO_TYPES.CLASS:
+                res_dto = self._parse_class()
+            elif dto_type_value[1] == DTO_TYPES.OBJ:
+                res_dto = self._parse_obj()
         # self._pop_gap()
         return res_dto
 
@@ -260,13 +272,4 @@ class YamlParser():
 
     def parse(self, s: str) -> any:
         self.__tokens = self._lex(s)
-        # remove all gaps
-        # self.__tokens = list(filter(
-        #     lambda token: token[0] != TOKEN_TYPES.GAP,
-        #     self.__tokens
-        # ))
-        # for t in self.__tokens:
-        #     print(t)
-        #     pass
-        # print(self.__tokens)
         return self._parse()
