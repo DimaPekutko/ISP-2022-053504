@@ -35,16 +35,15 @@ toml_ser = TomlSerializer()
 json_ser = JsonSerializer()
 yaml_ser = YamlSerializer()
 
+
 test_dict = {
-    "a": 228,
-    "b": {
-        "c": 3,
-        "d": "hello",
-        "e": True
+    "globals": {
+        "glob": 2
     },
-    "f": {
-        "hello": 2,
-        "some": 3.14
+    "code": {
+        "s": {
+            "d": 3
+        }
     }
 }
 
@@ -74,20 +73,20 @@ class Meta228(type):
 class ccc(metaclass=Meta228):
     pass
 
-obj = Meta228
+obj = test
 
 # s = toml_ser.dumps(obj)
-s2 = json_ser.dumps(obj)
-# s3 = yaml_ser.dumps(obj)
+# s2 = json_ser.dumps(obj)
+s3 = yaml_ser.dumps(obj)
 
-# open("data.yaml", "w").write(s3)
+open("data.yaml", "w").write(s3)
 # open("data.toml", "w").write(toml.dumps(obj))
-open("data.json", "w").write(s2)
+# open("data.json", "w").write(s2)
 
-# res = yaml_ser.loads(s2)
-
-res = json_ser.loads(s2)
+res = yaml_ser.loads(s3)
 print(res)
+
+# res = json_ser.loads(s2)
 
 
 # json_ser = JsonSerializer()

@@ -1,11 +1,29 @@
-DTO_TYPE: "dict"
-a: 228
-b: 
+DTO_TYPE: "func"
+name: "test"
+globals:
   DTO_TYPE: "dict"
-  c: 3
-  d: "hello"
-  e: true
-f: 
-  DTO_TYPE: "dict"
-  hello: 2
-  some: 3.14
+  glob: 2
+code: 
+  DTO_TYPE: "code"
+  fields:
+    DTO_TYPE: "dict"
+    co_argcount: 1
+    co_cellvars: []
+    co_code: "64017400170064011700640114005300"
+    co_consts: 
+      - null
+      - 2
+    co_filename: "/home/dkefir03/labs/ISP-2022-053504/main.py"
+    co_firstlineno: 28
+    co_flags: 67
+    co_freevars: []
+    co_kwonlyargcount: 0
+    co_lnotab: "0003"
+    co_name: "test"
+    co_names: 
+      - "glob"
+    co_nlocals: 1
+    co_posonlyargcount: 0
+    co_stacksize: 2
+    co_varnames: 
+      - "arg1"

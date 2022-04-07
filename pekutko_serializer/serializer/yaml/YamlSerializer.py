@@ -1,12 +1,11 @@
 import inspect
 import re
-from types import BuiltinFunctionType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
+from types import BuiltinFunctionType, CodeType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
 
 from pekutko_serializer.dto import DTO, DTO_TYPES
 
 from ..BaseSerializer import BaseSerializer
 from pekutko_serializer.parser.yaml import YamlParser
-
 
 
 class YamlSerializer(BaseSerializer):
@@ -59,10 +58,11 @@ class YamlSerializer(BaseSerializer):
                 actual_globals.update({glob[0]: glob[1]})
         self._visit(actual_globals)
 
-    def _visit_func_code(self, func):
-        code = func.__code__
+    def _visit_func_code(self, _code):
+        self._put(f'{DTO.dto_type}: "{DTO_TYPES.CODE}"\n', gaps=True)
+        self._put(f'{DTO.fields}:', gaps=True)
         code_dict = {}
-        for member in inspect.getmembers(code):
+        for member in inspect.getmembers(_code):
             if str(member[0]).startswith("co_"):
                 code_dict.update({member[0]: member[1]})
         self._visit(code_dict)
@@ -72,8 +72,8 @@ class YamlSerializer(BaseSerializer):
         self._put(f'{DTO.name}: "{func.__name__}"\n', gaps=True)
         self._put(f'{DTO.global_names}:', gaps=True)
         self._visit_func_globals(func)
-        self._put(f'{DTO.code}:', gaps=True)
-        self._visit_func_code(func)
+        self._put(f'{DTO.code}: ', gaps=True)
+        self._visit(func.__code__)
 
     def _visit_module(self, module):
         module_fields = {}
@@ -100,7 +100,12 @@ class YamlSerializer(BaseSerializer):
                 MappingProxyType,
                 GetSetDescriptorType
             ):
-                if mem[1] != None and mem[1] != type:
+                if mem[0] not in (
+                    "__mro__", "__base__", "__basicsize__",
+                    "__class__", "__dictoffset__", "__name__",
+                    "__qualname__", "__text_signature__", "__itemsize__",
+                    "__flags__", "__weakrefoffset__"
+                ):
                     fields_dict.update({mem[0]: mem[1]})
         self._visit(fields_dict)
 
@@ -130,7 +135,7 @@ class YamlSerializer(BaseSerializer):
                 self._put("\n")
         else:
             self.__res_str = self.__res_str[:-1]
-            self._put("[]")        
+            self._put("[]")
 
     def _is_primitive_type(self, obj: any):
         return type(obj) in (int, float, str, bool, bytes)
@@ -162,6 +167,8 @@ class YamlSerializer(BaseSerializer):
                 self._visit_dict(obj)
             elif type(obj) in (tuple, list):
                 self._visit_list(list(obj))
+            elif type(obj) == CodeType:
+                self._visit_func_code(obj)
             elif type(obj) == ModuleType:
                 self._visit_module(obj)
             elif inspect.isclass(obj):
