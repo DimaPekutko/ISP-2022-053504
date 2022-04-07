@@ -71,7 +71,7 @@ class Meta228(type):
 class ccc(metaclass=Meta228):
     pass
 
-obj = TestClass()
+obj = TestClass
 
 # s = toml_ser.dumps(obj)
 # s2 = json_ser.dumps(obj)
@@ -85,7 +85,7 @@ res = yaml_ser.loads(s3)
 print(res)
 
 # res = json_ser.loads(s2)
-
+# print(res)
 
 # json_ser = JsonSerializer()
 # obj = TestClass(c=228)

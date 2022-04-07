@@ -1,7 +1,18 @@
 import module_test
 
+
 def test_func() -> int:
     return 228
+
+
+def func_with_external_logic():
+    return module_test.external_module_logic()*100
+
+
+def test_closure():
+    def internal_func(a,b):
+        return a**b
+    return internal_func
 
 
 class TestClass():
@@ -15,14 +26,12 @@ class TestClass():
     def count(self) -> int:
         return self.c/18
 
+
 class Test():
     c = 1000
+
     def count(self) -> int:
         return self.c/18
-
-
-def func_with_external_logic():
-    return module_test.external_module_logic()*100
 
 
 test_obj = Test()

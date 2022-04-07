@@ -3,10 +3,10 @@ import pekutko_serializer as lib
 
 import data
 
-ser = lib.JsonSerializer()
+ser = lib.YamlSerializer()
 
 
-class TestJson(unittest.TestCase):
+class TestYaml(unittest.TestCase):
     def test_func(self):
         self.assertEqual(
             data.test_func(),
