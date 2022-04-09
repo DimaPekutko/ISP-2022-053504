@@ -63,12 +63,23 @@ class Meta228(type):
     # print(r)
 # exit()
 
+class TestClass():
+    some_bool_value = True
+    class_value = 18
+    c = 10.2
+
+    def __init__(self, a: int, b: int = 2):
+        self.c += (a+b)
+
+    def count(self) -> int:
+        return self.c/18
+
 class ccc(metaclass=Meta228):
     pass
 
 # print([2,3,4][:-1], [2,3,4][-1:])
 
-obj = ccc
+obj = TestClass
 
 toml_ser = TomlSerializer()
 json_ser = JsonSerializer()
@@ -93,9 +104,9 @@ res3 = yaml_ser.loads(s3)
 # #     print(m)
 print("_____MAIN_____")
 
-print(res1)
-print(res2)
-print(res3)
+print(res1(12,12).count())
+print(res2(12,12).count())
+print(res3(12,12).count())
 
 # print()
 # print("TOML")

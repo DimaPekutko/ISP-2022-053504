@@ -1,8 +1,90 @@
 DTO_TYPE = "class"
-name = "ccc"
+name = "TestClass"
 
 [fields]
 DTO_TYPE = "dict"
 __doc__ = {}
 __module__ = "__main__"
+c = 10.2
+class_value = 18
+some_bool_value = true
+
+[fields.__init__]
+DTO_TYPE = "func"
+name = "__init__"
+
+[fields.__init__.globals]
+DTO_TYPE = "dict"
+
+[fields.__init__.code]
+DTO_TYPE = "code"
+
+[fields.__init__.code.fields]
+DTO_TYPE = "dict"
+co_argcount = 3
+co_cellvars = []
+co_code = "7c0004006a007c017c021700370002005f0064005300"
+co_filename = "/home/dkefir03/labs/ISP-2022-053504/main.py"
+co_firstlineno = 71
+co_flags = 67
+co_freevars = []
+co_kwonlyargcount = 0
+co_lnotab = "0001"
+co_name = "__init__"
+co_nlocals = 3
+co_posonlyargcount = 0
+co_stacksize = 4
+
+[fields.__init__.code.fields.co_consts]
+DTO_TYPE = "list"
+__dto__list_dict_item0 = {}
+
+[fields.__init__.code.fields.co_names]
+DTO_TYPE = "list"
+__dto__list_dict_item0 = "c"
+
+[fields.__init__.code.fields.co_varnames]
+DTO_TYPE = "list"
+__dto__list_dict_item0 = "self"
+__dto__list_dict_item1 = "a"
+__dto__list_dict_item2 = "b"
+
+[fields.count]
+DTO_TYPE = "func"
+name = "count"
+
+[fields.count.globals]
+DTO_TYPE = "dict"
+
+[fields.count.code]
+DTO_TYPE = "code"
+
+[fields.count.code.fields]
+DTO_TYPE = "dict"
+co_argcount = 1
+co_cellvars = []
+co_code = "7c006a0064011b005300"
+co_filename = "/home/dkefir03/labs/ISP-2022-053504/main.py"
+co_firstlineno = 74
+co_flags = 67
+co_freevars = []
+co_kwonlyargcount = 0
+co_lnotab = "0001"
+co_name = "count"
+co_nlocals = 1
+co_posonlyargcount = 0
+co_stacksize = 2
+
+[fields.count.code.fields.co_consts]
+DTO_TYPE = "list"
+__dto__list_dict_item0 = {}
+__dto__list_dict_item1 = 18
+
+[fields.count.code.fields.co_names]
+DTO_TYPE = "list"
+__dto__list_dict_item0 = "c"
+
+[fields.count.code.fields.co_varnames]
+DTO_TYPE = "list"
+__dto__list_dict_item0 = "self"
 

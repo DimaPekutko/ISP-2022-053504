@@ -1,6 +1,68 @@
 DTO_TYPE: "class"
-name: "ccc"
+name: "TestClass"
 fields:
   DTO_TYPE: "dict"
   __doc__: null
+  __init__: 
+    DTO_TYPE: "func"
+    name: "__init__"
+    globals:
+      DTO_TYPE: "dict"
+    code: 
+      DTO_TYPE: "code"
+      fields:
+        DTO_TYPE: "dict"
+        co_argcount: 3
+        co_cellvars: []
+        co_code: "7c0004006a007c017c021700370002005f0064005300"
+        co_consts: 
+          - null
+        co_filename: "/home/dkefir03/labs/ISP-2022-053504/main.py"
+        co_firstlineno: 71
+        co_flags: 67
+        co_freevars: []
+        co_kwonlyargcount: 0
+        co_lnotab: "0001"
+        co_name: "__init__"
+        co_names: 
+          - "c"
+        co_nlocals: 3
+        co_posonlyargcount: 0
+        co_stacksize: 4
+        co_varnames: 
+          - "self"
+          - "a"
+          - "b"
   __module__: "__main__"
+  c: 10.2
+  class_value: 18
+  count: 
+    DTO_TYPE: "func"
+    name: "count"
+    globals:
+      DTO_TYPE: "dict"
+    code: 
+      DTO_TYPE: "code"
+      fields:
+        DTO_TYPE: "dict"
+        co_argcount: 1
+        co_cellvars: []
+        co_code: "7c006a0064011b005300"
+        co_consts: 
+          - null
+          - 18
+        co_filename: "/home/dkefir03/labs/ISP-2022-053504/main.py"
+        co_firstlineno: 74
+        co_flags: 67
+        co_freevars: []
+        co_kwonlyargcount: 0
+        co_lnotab: "0001"
+        co_name: "count"
+        co_names: 
+          - "c"
+        co_nlocals: 1
+        co_posonlyargcount: 0
+        co_stacksize: 2
+        co_varnames: 
+          - "self"
+  some_bool_value: true

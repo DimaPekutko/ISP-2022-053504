@@ -18,6 +18,7 @@ class TomlSerializer(BaseSerializer):
         self.__parser = TomlParser()
 
     def dumps(self, obj: any) -> str:
+        self.__res_str = ""
         self._visit(obj)
         # replace all repeated new lines
         self.__res_str = re.sub(r"(\n)\1{2,}", "\n\n", self.__res_str)

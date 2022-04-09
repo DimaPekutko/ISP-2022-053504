@@ -24,7 +24,7 @@ class TestClass():
         self.c += (a+b)
 
     def count(self) -> int:
-        return self.c/18
+        return int(self.c/18)
 
 
 class Test():
