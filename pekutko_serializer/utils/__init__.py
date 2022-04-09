@@ -1,5 +1,8 @@
 import inspect
 import re
+import imp
+import os.path
+import sys
 from types import BuiltinFunctionType, CodeType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
 
 
@@ -54,3 +57,19 @@ def get_actual_class_fields(_class: type) -> dict:
                 ):
                     fields_dict.update({mem[0]: mem[1]})
     return fields_dict
+
+
+
+
+def is_std_lib_module(module: ModuleType):
+    python_libs_path = sys.path[2]
+    module_path = imp.find_module(module.__name__)[1]
+    if module.__name__ in sys.builtin_module_names:
+        return True
+    elif python_libs_path in module_path:
+        return True
+    elif 'site-packages' in module_path:
+        return True
+    return False
+
+

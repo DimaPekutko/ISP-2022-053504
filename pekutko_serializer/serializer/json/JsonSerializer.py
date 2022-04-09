@@ -56,8 +56,11 @@ class JsonSerializer(BaseSerializer):
         self._put(f'"{DTO.dto_type}": "{DTO_TYPES.MODULE}",')
         self._put(f'"{DTO.name}": "{module.__name__}",')
         self._put(f'"{DTO.fields}": ')
-        module_fields = utils.get_actual_module_fields(module)
-        self._visit(module_fields)
+        if utils.is_std_lib_module(module):
+            self._visit(None)
+        else:
+            module_fields = utils.get_actual_module_fields(module)
+            self._visit(module_fields)
 
     def _visit_class(self, _class):
         self._put(f'"{DTO.dto_type}": "{DTO_TYPES.CLASS}",')

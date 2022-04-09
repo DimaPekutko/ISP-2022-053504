@@ -139,10 +139,14 @@ class TomlParser():
         self._skip_field_name()
         module_fields = self._parse()
 
-        module = imp.new_module(module_name)
-        # module["__dict__"] = module_fields
-        for field in module_fields.items():
-            setattr(module,field[0],field[1])
+        module = None
+        # first case mean that module is in python std or built in
+        if module_fields == None:
+            module = __import__(module_name)
+        else: 
+            module = imp.new_module(module_name)
+            for field in module_fields.items():
+                setattr(module,field[0],field[1])
         return module
 
     def _parse_class(self) -> type:

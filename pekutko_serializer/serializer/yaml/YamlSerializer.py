@@ -71,9 +71,12 @@ class YamlSerializer(BaseSerializer):
     def _visit_module(self, module):
         self._put(f'{DTO.dto_type}: "{DTO_TYPES.MODULE}"\n', gaps=True)
         self._put(f'{DTO.name}: "{module.__name__}"\n', gaps=True)
-        self._put(f'{DTO.fields}:', gaps=True)
-        module_fields = utils.get_actual_module_fields(module)
-        self._visit(module_fields)
+        self._put(f'{DTO.fields}: ', gaps=True)
+        if utils.is_std_lib_module(module):
+            self._visit(None)
+        else:
+            module_fields = utils.get_actual_module_fields(module)
+            self._visit(module_fields)
 
     def _visit_class(self, _class):
         self._put(f'{DTO.dto_type}: "{DTO_TYPES.CLASS}"\n', gaps=True)

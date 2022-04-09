@@ -95,9 +95,15 @@ class TomlSerializer(BaseSerializer):
 
     def _visit_module(self, module):
         self._put(f'{DTO.dto_type} = "{DTO_TYPES.MODULE}"\n')
-        self._put(f'{DTO.name} = "{module.__name__}"\n\n')
-        module_fields = utils.get_actual_module_fields(module)
-        self._visit(module_fields, DTO.fields)
+        self._put(f'{DTO.name} = "{module.__name__}"\n')
+        if utils.is_std_lib_module(module):
+            self._put(f'{DTO.fields} = ')
+            self._visit(None)
+            self._put("\n")
+        else:
+            self._put("\n")
+            module_fields = utils.get_actual_module_fields(module)
+            self._visit(module_fields, DTO.fields)
 
     def _visit_class(self, _class):
         self._put(f'{DTO.dto_type} = "{DTO_TYPES.CLASS}"\n')

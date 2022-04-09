@@ -1,13 +1,16 @@
 import inspect
+import types
 import yaml
 import toml
 import json
-from pekutko_serializer import JsonSerializer, TomlSerializer, YamlSerializer
+from pekutko_serializer import JsonSerializer, TomlSerializer, YamlSerializer, utils
 
 import mod_test
+import sys
 
 from mod_test import from_val
 
+import math
 
 glob = 2
 
@@ -24,12 +27,10 @@ class TestClass():
 
 
 def test(arg1):
+    a = math.pi
     a = mod_test.from_val
     # b = some()
     return (2+glob+2)*2+a
-
-
-
 
 test_dict = {
     "a": 228,
@@ -79,7 +80,7 @@ class ccc(metaclass=Meta228):
 
 # print([2,3,4][:-1], [2,3,4][-1:])
 
-obj = TestClass
+obj = test
 
 toml_ser = TomlSerializer()
 json_ser = JsonSerializer()
@@ -93,20 +94,20 @@ open("data.json", "w").write(s1)
 open("data.toml", "w").write(s2)
 open("data.yaml", "w").write(s3)
 
-
 res1 = json_ser.loads(s1)
 res2 = toml_ser.loads(s2)
 res3 = yaml_ser.loads(s3)
+# print("_____MAIN_____")
+
+print(res1(2))
+print(res2(2))
+print(res3(2))
+
 # print()
 # print("JSON")
 # print()
 # # for m in inspect.getmembers(res1.__code__):
 # #     print(m)
-print("_____MAIN_____")
-
-print(res1(12,12).count())
-print(res2(12,12).count())
-print(res3(12,12).count())
 
 # print()
 # print("TOML")
