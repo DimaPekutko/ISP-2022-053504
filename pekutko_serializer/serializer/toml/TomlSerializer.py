@@ -1,7 +1,9 @@
 
 import inspect
-from types import BuiltinFunctionType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
-
+import re
+from types import BuiltinFunctionType, CodeType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
+from pekutko_serializer import utils
+from pekutko_serializer.parser.toml.TomlParser import TomlParser
 from pekutko_serializer.dto import DTO, DTO_TYPES
 from ..BaseSerializer import BaseSerializer
 
@@ -13,11 +15,12 @@ class TomlSerializer(BaseSerializer):
 
     def __init__(self):
         super().__init__()
-        # self.__parser = JsonParser()
+        self.__parser = TomlParser()
 
     def dumps(self, obj: any) -> str:
-        # self.__res_str = ""
         self._visit(obj)
+        # replace all repeated new lines
+        self.__res_str = re.sub(r"(\n)\1{2,}", "\n\n", self.__res_str)
         return self.__res_str
 
     def dump(self, obj: any, file_path: str):
@@ -39,7 +42,7 @@ class TomlSerializer(BaseSerializer):
         return self.__container_names.pop()
 
     def _get_concat_name(self) -> str:
-        return ".".join(self.__container_names)
+        return (".".join(self.__container_names))[1:]
 
     def _is_primitive_type(self, obj: any) -> bool:
         _type = type(obj)
@@ -47,7 +50,8 @@ class TomlSerializer(BaseSerializer):
             return True
         elif _type in (tuple, list):
             if len(obj) >= 1:
-                return self._is_primitive_type(obj[0])
+                # return all(self._is_primitive_type(obj[i])==True for i in range(len(obj)))
+                return False
             else:
                 return True
         return False
@@ -62,71 +66,59 @@ class TomlSerializer(BaseSerializer):
                 complex_dict.update({item[0]: item[1]})
         return prim_dict, complex_dict
 
+    def _divide_list_by_primitive(self, _list: list) -> tuple:
+        prim_list = []
+        complex_list = []
+        for item in _list:
+            if self._is_primitive_type(item):
+                prim_list.append(item)
+            else:
+                complex_list.append(item)
+        return prim_list, complex_list
+
     def _visit_func_globals(self, func):
-        code = func.__code__
-        func_globals = func.__globals__.items()
-        actual_globals = {}
-        for glob in func_globals:
-            if glob[0] in code.co_names:
-                actual_globals.update({glob[0]: glob[1]})
+        actual_globals = utils.get_actual_func_globals(func)
         self._visit(actual_globals, DTO.global_names)
 
     def _visit_func_code(self, func):
-        code = func.__code__
-        code_dict = {}
-        for member in inspect.getmembers(code):
-            if str(member[0]).startswith("co_"):
-                code_dict.update({member[0]: member[1]})
-        self._visit(code_dict, DTO.code)
+        self._put(f'{DTO.dto_type} = "{DTO_TYPES.CODE}"\n\n')
+        code_dict = utils.get_actual_code_fields(func)
+        self._visit(code_dict, DTO.fields)
 
     def _visit_func(self, func):
         self._put(f'{DTO.dto_type} = "{DTO_TYPES.FUNC}"\n')
         self._put(f'{DTO.name} = "{func.__name__}"\n\n')
         self._visit_func_globals(func)
-        self._visit_func_code(func)
-        pass
+        self._visit(func.__code__, DTO.code)
+        # exit()
 
     def _visit_module(self, module):
-        module_fields = {}
         self._put(f'{DTO.dto_type} = "{DTO_TYPES.MODULE}"\n')
         self._put(f'{DTO.name} = "{module.__name__}"\n\n')
-        module_members = inspect.getmembers(module)
-        for mem in module_members:
-            if not mem[0].startswith("__"):
-                module_fields.update({mem[0]: mem[1]})
+        module_fields = utils.get_actual_module_fields(module)
         self._visit(module_fields, DTO.fields)
 
     def _visit_class(self, _class):
         self._put(f'{DTO.dto_type} = "{DTO_TYPES.CLASS}"\n')
         self._put(f'{DTO.name} = "{_class.__name__}"\n\n')
         # self._put(f'"{DTO.fields}": ')
-        mems = inspect.getmembers(_class)
-        fields_dict = {}
-        for mem in mems:
-            if type(mem[1]) not in (
-                WrapperDescriptorType,
-                MethodDescriptorType,
-                BuiltinFunctionType,
-                MappingProxyType,
-                GetSetDescriptorType
-            ):
-                if mem[1] != None and mem[1] != type:
-                    fields_dict.update({mem[0]: mem[1]})
+        fields_dict = utils.get_actual_class_fields(_class)
         self._visit(fields_dict, DTO.fields)
-        pass
 
     def _visit_obj(self, obj):
         # print(obj)
         self._put(f'{DTO.dto_type} =  "{DTO_TYPES.OBJ}"\n\n')
         self._visit(obj.__class__, DTO.base_class)
         self._visit(obj.__dict__, DTO.fields)
-        pass
 
     def _visit_dict(self, _dict: dict):
         # sorting dict to set primitive fields at the begining
         prim_dict, complex_dict = self._divide_dict_by_primitive(_dict)
 
         self._put(f'{DTO.dto_type} = "{DTO_TYPES.DICT}"\n')
+
+        # print(prim_dict, complex_dict)
+        # exit()
 
         for prim in prim_dict.items():
             self._put(f'{prim[0]} = ')
@@ -148,32 +140,45 @@ class TomlSerializer(BaseSerializer):
         elif _type == bool:
             val = "true" if prim_obj else "false"
             self._put(f'{val}')
-        elif _type in (list, tuple):
-            self._put('[')
-            for i, obj in enumerate(prim_obj):
-                if i != 0:
-                    self._put(",")
-                self._visit(obj)
-            self._put(']')
+        elif prim_obj == None:
+            self._put("{}")
+        elif type(prim_obj) in (tuple, list) and len(prim_obj) == 0:
+            self._put("[]")
+            return
         elif _type == bytes:
             encoded = prim_obj.hex()
             self._put(f'"{encoded}"')
 
-    def _visit_list(self, obj: any, container_name: str):
-        print(obj)
-        pass
+    def _visit_list(self, _list: any):
+        prim_list, complex_list = self._divide_list_by_primitive(_list)
+        self._put(f'{DTO.dto_type} = "{DTO_TYPES.LIST}"\n')
+        i = 0
+        for prim in prim_list:
+            self._put(f'{DTO.item}{i} = ')
+            self._visit(prim)
+            self._put("\n")
+            i += 1
+        self._put("\n")
+        for comp in complex_list:
+            self._visit(comp, f'{DTO.item}{i}')
+            self._put("\n")
+            i += 1
 
     def _visit_complex(self, comp_obj: any, container_name: str):
         self._push_name(container_name)
         name = self._get_concat_name()
-        self._put(f'[{name}]\n')
-
+        if len(self.__container_names) > 1:
+            self._put(f'[{name}]\n')
         if type(comp_obj) == dict:
             self._visit_dict(comp_obj)
+        elif type(comp_obj) in (tuple, list):
+            self._visit_list(comp_obj)
         elif type(comp_obj) == ModuleType:
             self._visit_module(comp_obj)
         elif inspect.isclass(comp_obj):
             self._visit_class(comp_obj)
+        elif type(comp_obj) == CodeType:
+            self._visit_func_code(comp_obj)
         elif callable(comp_obj):
             self._visit_func(comp_obj)
         elif isinstance(comp_obj, object):
@@ -184,7 +189,5 @@ class TomlSerializer(BaseSerializer):
     def _visit(self, obj, new_name: str = ""):
         if self._is_primitive_type(obj):
             self._visit_primitive(obj)
-        elif type(obj) in (tuple, list):
-            self._visit_list(obj, new_name)
         else:
             self._visit_complex(obj, new_name)

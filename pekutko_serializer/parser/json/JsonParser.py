@@ -4,7 +4,7 @@ import re
 from types import CodeType, FunctionType, ModuleType
 
 from pekutko_serializer.dto import DTO, DTO_TYPES
-import pekutko_serializer.parser.common_tokens as TOKEN_TYPES
+import pekutko_serializer.parser.json.json_tokens as TOKEN_TYPES
 
 
 class JsonParser():
@@ -211,10 +211,7 @@ class JsonParser():
                 res_dto = self._parse_class()
             elif dto_type_value[1] == DTO_TYPES.OBJ:
                 res_dto = self._parse_obj()
-        else:
-            raise Exception(
-                f"Field '{DTO.dto_type}' must be on top of the json object")
-
+                
         self._eat(TOKEN_TYPES.RBRACE)
         return res_dto
 

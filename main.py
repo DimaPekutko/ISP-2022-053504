@@ -26,23 +26,18 @@ class TestClass():
 def test(arg1):
     a = mod_test.from_val
     # b = some()
-    return (2+glob+2)*2
+    return (2+glob+2)*2+a
 
 
-toml_ser = TomlSerializer()
-json_ser = JsonSerializer()
-yaml_ser = YamlSerializer()
 
 
 test_dict = {
-    "globals": {
-        "glob": 2
+    "a": 228,
+    "b": [2,3],
+    "c": {
+        "d": "hello",
+        "b": True
     },
-    "code": {
-        "s": {
-            "d": 3
-        }
-    }
 }
 
 def closure228():
@@ -71,21 +66,49 @@ class Meta228(type):
 class ccc(metaclass=Meta228):
     pass
 
-obj = TestClass
+# print([2,3,4][:-1], [2,3,4][-1:])
 
-# s = toml_ser.dumps(obj)
-# s2 = json_ser.dumps(obj)
+obj = ccc
+
+toml_ser = TomlSerializer()
+json_ser = JsonSerializer()
+yaml_ser = YamlSerializer()
+
+s1 = json_ser.dumps(obj)
+s2 = toml_ser.dumps(obj)
 s3 = yaml_ser.dumps(obj)
 
+open("data.json", "w").write(s1)
+open("data.toml", "w").write(s2)
 open("data.yaml", "w").write(s3)
-# open("data.toml", "w").write(toml.dumps(obj))
-# open("data.json", "w").write(s2)
 
-res = yaml_ser.loads(s3)
-print(res)
+
+res1 = json_ser.loads(s1)
+res2 = toml_ser.loads(s2)
+res3 = yaml_ser.loads(s3)
+# print()
+# print("JSON")
+# print()
+# # for m in inspect.getmembers(res1.__code__):
+# #     print(m)
+print("_____MAIN_____")
+
+print(res1)
+print(res2)
+print(res3)
+
+# print()
+# print("TOML")
+# print()
+# # for m in inspect.getmembers(res2.__code__):
+# #     print(m)
+# # res = yaml_ser.loads(s3)
+# # res2.__code__["co_consts"] = res1.__code__.co_consts
+# # setattr(res2.__code__, "co_consts", res1.__code__.co_consts)
+# print(res2())
 
 # res = json_ser.loads(s2)
-# print(res)
+# print(res2())
 
 # json_ser = JsonSerializer()
 # obj = TestClass(c=228)

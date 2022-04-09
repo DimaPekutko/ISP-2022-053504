@@ -1,6 +1,7 @@
 import inspect
 import re
 from types import BuiltinFunctionType, CodeType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
+from pekutko_serializer import utils
 
 from pekutko_serializer.dto import DTO, DTO_TYPES
 
@@ -21,7 +22,7 @@ class YamlSerializer(BaseSerializer):
     def dumps(self, obj: any) -> str:
         self.__res_str = ""
         self._visit(obj, first_call=True)
-        # delete all repeated new lines
+        # replace all repeated new lines
         self.__res_str = re.sub(r"(\n)\1{1,}", "\n", self.__res_str)
         return self.__res_str
 
@@ -50,21 +51,13 @@ class YamlSerializer(BaseSerializer):
         return self.__gaps.pop()
 
     def _visit_func_globals(self, func):
-        code = func.__code__
-        func_globals = func.__globals__.items()
-        actual_globals = {}
-        for glob in func_globals:
-            if glob[0] in code.co_names:
-                actual_globals.update({glob[0]: glob[1]})
+        actual_globals = utils.get_actual_func_globals(func)
         self._visit(actual_globals)
 
     def _visit_func_code(self, _code):
         self._put(f'{DTO.dto_type}: "{DTO_TYPES.CODE}"\n', gaps=True)
         self._put(f'{DTO.fields}:', gaps=True)
-        code_dict = {}
-        for member in inspect.getmembers(_code):
-            if str(member[0]).startswith("co_"):
-                code_dict.update({member[0]: member[1]})
+        code_dict = utils.get_actual_code_fields(_code)
         self._visit(code_dict)
 
     def _visit_func(self, func):
@@ -76,14 +69,10 @@ class YamlSerializer(BaseSerializer):
         self._visit(func.__code__)
 
     def _visit_module(self, module):
-        module_fields = {}
         self._put(f'{DTO.dto_type}: "{DTO_TYPES.MODULE}"\n', gaps=True)
         self._put(f'{DTO.name}: "{module.__name__}"\n', gaps=True)
         self._put(f'{DTO.fields}:', gaps=True)
-        module_members = inspect.getmembers(module)
-        for mem in module_members:
-            if not mem[0].startswith("__"):
-                module_fields.update({mem[0]: mem[1]})
+        module_fields = utils.get_actual_module_fields(module)
         self._visit(module_fields)
 
     def _visit_class(self, _class):
@@ -91,28 +80,7 @@ class YamlSerializer(BaseSerializer):
         self._put(f'{DTO.name}: "{_class.__name__}"\n', gaps=True)
         self._put(f'{DTO.fields}:', gaps=True)
         mems = inspect.getmembers(_class)
-        fields_dict = {}
-        if _class == type:
-            fields_dict.update({
-                "__bases__": [],
-            })
-        else:
-            mems = inspect.getmembers(_class)
-            for mem in mems:
-                if type(mem[1]) not in (
-                    WrapperDescriptorType,
-                    MethodDescriptorType,
-                    BuiltinFunctionType,
-                    MappingProxyType,
-                    GetSetDescriptorType
-                ):
-                    if mem[0] not in (
-                        "__mro__", "__base__", "__basicsize__",
-                        "__class__", "__dictoffset__", "__name__",
-                        "__qualname__", "__text_signature__", "__itemsize__",
-                        "__flags__", "__weakrefoffset__"
-                    ):
-                        fields_dict.update({mem[0]: mem[1]})
+        fields_dict = utils.get_actual_class_fields(_class)
         self._visit(fields_dict)
 
     def _visit_obj(self, obj):

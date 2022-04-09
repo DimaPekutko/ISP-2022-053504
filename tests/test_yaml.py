@@ -18,15 +18,15 @@ class TestYaml(unittest.TestCase):
         obj1 = data.TestClass(arg, arg)
         obj2 = ser.loads(ser.dumps(data.TestClass))(arg, arg)
         self.assertEqual(obj1.count(), obj2.count())
-    
+
     def test_obj(self):
         obj = data.test_obj
         obj.c = 22
         self.assertEqual(
-            obj.count(), 
+            obj.count(),
             ser.loads(ser.dumps(obj)).count()
         )
-    
+
     def test_module(self):
         func = data.func_with_external_logic
         self.assertEqual(
@@ -35,10 +35,10 @@ class TestYaml(unittest.TestCase):
         )
 
     def test_closure(self):
-        (arg1, arg2) = (8,5)
+        (arg1, arg2) = (8, 5)
         self.assertEqual(
-            data.test_closure()(arg1,arg2),
-            ser.loads(ser.dumps(data.test_closure))()(arg1,arg2)
+            data.test_closure()(arg1, arg2),
+            ser.loads(ser.dumps(data.test_closure))()(arg1, arg2)
         )
 
 

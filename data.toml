@@ -1,5 +1,8 @@
-[globals]
-a = 3
-[[globals.b]]
-c = 2
+DTO_TYPE = "class"
+name = "ccc"
+
+[fields]
+DTO_TYPE = "dict"
+__doc__ = {}
+__module__ = "__main__"
 

@@ -9,7 +9,7 @@ class DTO_TYPES():
     CLASS = "class"
     OBJ = "obj"
     DICT = "dict"
-    MIRROR_DICT = "mirror_dict"
+    LIST = "list"
 
 @dataclass
 class DTO():
@@ -20,3 +20,4 @@ class DTO():
     code = "code"
     global_names = "globals"
     base_class = "class"
+    item = "__dto__list_dict_item"
