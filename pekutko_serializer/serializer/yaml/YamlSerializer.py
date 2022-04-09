@@ -27,13 +27,19 @@ class YamlSerializer(BaseSerializer):
         return self.__res_str
 
     def dump(self, obj: any, file_path: str):
-        pass
+        with open(file_path, "w") as file:
+            _str = self.dumps(obj)
+            file.write(_str)
 
     def loads(self, source: str) -> any:
         return self.__parser.parse(source)
 
     def load(self, file_path: str) -> any:
-        pass
+        obj = None
+        with open(file_path) as file:
+            _str = file.read()
+            obj = self.loads(_str)
+        return obj
 
     def _put(self, s: str, gaps: bool = False):
         if gaps and not self.__gaps_blocked:

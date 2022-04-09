@@ -1,68 +1,27 @@
 {
   "DTO_TYPE": "func",
   "name": "test",
-  "globals": {
-    "DTO_TYPE": "dict",
-    "mod_test": {
-      "DTO_TYPE": "module",
-      "name": "mod_test",
-      "fields": {
-        "DTO_TYPE": "dict",
-        "from_module": {
-          "DTO_TYPE": "func",
-          "name": "from_module",
-          "globals": { "DTO_TYPE": "dict" },
-          "code": {
-            "DTO_TYPE": "code",
-            "fields": {
-              "DTO_TYPE": "dict",
-              "co_argcount": 1,
-              "co_cellvars": [],
-              "co_code": "74007c00640117008301010064005300",
-              "co_consts": [null, " ya"],
-              "co_filename": "/home/dkefir03/labs/ISP-2022-053504/mod_test.py",
-              "co_firstlineno": 1,
-              "co_flags": 67,
-              "co_freevars": [],
-              "co_kwonlyargcount": 0,
-              "co_lnotab": "0001",
-              "co_name": "from_module",
-              "co_names": ["print"],
-              "co_nlocals": 1,
-              "co_posonlyargcount": 0,
-              "co_stacksize": 3,
-              "co_varnames": ["msg"]
-            }
-          }
-        },
-        "from_val": 228,
-        "glob": 16
-      }
-    },
-    "from_val": 228,
-    "math": { "DTO_TYPE": "module", "name": "math", "fields": null },
-    "glob": 2
-  },
+  "globals": { "DTO_TYPE": "dict", "glob": 2 },
   "code": {
     "DTO_TYPE": "code",
     "fields": {
       "DTO_TYPE": "dict",
       "co_argcount": 1,
       "co_cellvars": [],
-      "co_code": "74006a017d0174026a037d0164017404170064011700640114007c0117005300",
+      "co_code": "64017400170064011700640114005300",
       "co_consts": [null, 2],
       "co_filename": "/home/dkefir03/labs/ISP-2022-053504/main.py",
       "co_firstlineno": 29,
       "co_flags": 67,
       "co_freevars": [],
       "co_kwonlyargcount": 0,
-      "co_lnotab": "000106010602",
+      "co_lnotab": "0004",
       "co_name": "test",
-      "co_names": ["math", "pi", "mod_test", "from_val", "glob"],
-      "co_nlocals": 2,
+      "co_names": ["glob"],
+      "co_nlocals": 1,
       "co_posonlyargcount": 0,
       "co_stacksize": 2,
-      "co_varnames": ["arg1", "a"]
+      "co_varnames": ["arg1"]
     }
   }
 }

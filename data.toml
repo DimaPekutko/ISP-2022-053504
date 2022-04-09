@@ -3,61 +3,7 @@ name = "test"
 
 [globals]
 DTO_TYPE = "dict"
-from_val = 228
 glob = 2
-
-[globals.mod_test]
-DTO_TYPE = "module"
-name = "mod_test"
-
-[globals.mod_test.fields]
-DTO_TYPE = "dict"
-from_val = 228
-glob = 16
-
-[globals.mod_test.fields.from_module]
-DTO_TYPE = "func"
-name = "from_module"
-
-[globals.mod_test.fields.from_module.globals]
-DTO_TYPE = "dict"
-
-[globals.mod_test.fields.from_module.code]
-DTO_TYPE = "code"
-
-[globals.mod_test.fields.from_module.code.fields]
-DTO_TYPE = "dict"
-co_argcount = 1
-co_cellvars = []
-co_code = "74007c00640117008301010064005300"
-co_filename = "/home/dkefir03/labs/ISP-2022-053504/mod_test.py"
-co_firstlineno = 1
-co_flags = 67
-co_freevars = []
-co_kwonlyargcount = 0
-co_lnotab = "0001"
-co_name = "from_module"
-co_nlocals = 1
-co_posonlyargcount = 0
-co_stacksize = 3
-
-[globals.mod_test.fields.from_module.code.fields.co_consts]
-DTO_TYPE = "list"
-__dto__list_dict_item0 = {}
-__dto__list_dict_item1 = " ya"
-
-[globals.mod_test.fields.from_module.code.fields.co_names]
-DTO_TYPE = "list"
-__dto__list_dict_item0 = "print"
-
-[globals.mod_test.fields.from_module.code.fields.co_varnames]
-DTO_TYPE = "list"
-__dto__list_dict_item0 = "msg"
-
-[globals.math]
-DTO_TYPE = "module"
-name = "math"
-fields = {}
 
 [code]
 DTO_TYPE = "code"
@@ -66,15 +12,15 @@ DTO_TYPE = "code"
 DTO_TYPE = "dict"
 co_argcount = 1
 co_cellvars = []
-co_code = "74006a017d0174026a037d0164017404170064011700640114007c0117005300"
+co_code = "64017400170064011700640114005300"
 co_filename = "/home/dkefir03/labs/ISP-2022-053504/main.py"
 co_firstlineno = 29
 co_flags = 67
 co_freevars = []
 co_kwonlyargcount = 0
-co_lnotab = "000106010602"
+co_lnotab = "0004"
 co_name = "test"
-co_nlocals = 2
+co_nlocals = 1
 co_posonlyargcount = 0
 co_stacksize = 2
 
@@ -85,14 +31,9 @@ __dto__list_dict_item1 = 2
 
 [code.fields.co_names]
 DTO_TYPE = "list"
-__dto__list_dict_item0 = "math"
-__dto__list_dict_item1 = "pi"
-__dto__list_dict_item2 = "mod_test"
-__dto__list_dict_item3 = "from_val"
-__dto__list_dict_item4 = "glob"
+__dto__list_dict_item0 = "glob"
 
 [code.fields.co_varnames]
 DTO_TYPE = "list"
 __dto__list_dict_item0 = "arg1"
-__dto__list_dict_item1 = "a"
 

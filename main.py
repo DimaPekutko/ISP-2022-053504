@@ -27,10 +27,10 @@ class TestClass():
 
 
 def test(arg1):
-    a = math.pi
-    a = mod_test.from_val
+    # a = math.pi
+    # a = mod_test.from_val
     # b = some()
-    return (2+glob+2)*2+a
+    return (2+glob+2)*2
 
 test_dict = {
     "a": 228,
@@ -93,6 +93,9 @@ s3 = yaml_ser.dumps(obj)
 open("data.json", "w").write(s1)
 open("data.toml", "w").write(s2)
 open("data.yaml", "w").write(s3)
+
+# g = 228
+
 
 res1 = json_ser.loads(s1)
 res2 = toml_ser.loads(s2)
