@@ -50,19 +50,8 @@ def closure228():
 class Meta228(type):
     s = 33
     def __new__(cls, name, bases, dct):
-        print("ya")
+        dct.update({"a": 228})
         return type(name, bases,dct)
-
-# class Some(metaclass=Meta228):
-#     pass
-
-# for m in inspect.getmembers(Some):
-#     print(m)
-
-# f = inspect.getmembers(closure228)
-# for r in f:
-    # print(r)
-# exit()
 
 class TestClass():
     some_bool_value = True
@@ -77,10 +66,9 @@ class TestClass():
 
 class ccc(metaclass=Meta228):
     pass
-
 # print([2,3,4][:-1], [2,3,4][-1:])
 
-obj = test
+obj = Meta228
 
 toml_ser = TomlSerializer()
 json_ser = JsonSerializer()
@@ -90,24 +78,27 @@ s1 = json_ser.dumps(obj)
 s2 = toml_ser.dumps(obj)
 s3 = yaml_ser.dumps(obj)
 
-# open("data.json", "w").write(s1)
+open("data.json", "w").write(s1)
 open("data.toml", "w").write(s2)
 open("data.yaml", "w").write(s3)
 
 # g = 228
 
 
-# res1 = json_ser.loads(s1)
+res1 = json_ser.loads(s1)
 res2 = toml_ser.loads(s2)
 res3 = yaml_ser.loads(s3)
 # print("_____MAIN_____")
 
-# print(res1(2))
-print(res2(2))
-print(res3(2))
+print(res1)
+print(res2)
+print(res3)
 
-o = json_ser.load("data.json")
-print(o(2,3))
+class TestSome(metaclass=res1):
+    pass
+
+print(TestSome().a)
+
 
 # print()
 # print("JSON")

@@ -1,29 +1,47 @@
-DTO_TYPE: "func"
-name: "test"
-globals:
+DTO_TYPE: "class"
+name: "Meta228"
+fields:
   DTO_TYPE: "dict"
-  glob: 2
-code: 
-  DTO_TYPE: "code"
-  fields:
-    DTO_TYPE: "dict"
-    co_argcount: 1
-    co_cellvars: []
-    co_code: "64017400170064011700640114005300"
-    co_consts: 
-      - null
-      - 2
-    co_filename: "/home/dkefir03/labs/ISP-2022-053504/main.py"
-    co_firstlineno: 29
-    co_flags: 67
-    co_freevars: []
-    co_kwonlyargcount: 0
-    co_lnotab: "0004"
-    co_name: "test"
-    co_names: 
-      - "glob"
-    co_nlocals: 1
-    co_posonlyargcount: 0
-    co_stacksize: 2
-    co_varnames: 
-      - "arg1"
+  __bases__: 
+    - DTO_TYPE: "class"
+      name: "type"
+      fields:
+        DTO_TYPE: "dict"
+        __bases__: []
+  __doc__: null
+  __module__: "__main__"
+  __new__: 
+    DTO_TYPE: "func"
+    name: "__new__"
+    globals:
+      DTO_TYPE: "dict"
+    code: 
+      DTO_TYPE: "code"
+      fields:
+        DTO_TYPE: "dict"
+        co_argcount: 4
+        co_cellvars: []
+        co_code: "7c03a000640164026901a101010074017c017c027c0383035300"
+        co_consts: 
+          - null
+          - "a"
+          - 228
+        co_filename: "/home/dkefir03/labs/ISP-2022-053504/main.py"
+        co_firstlineno: 52
+        co_flags: 67
+        co_freevars: []
+        co_kwonlyargcount: 0
+        co_lnotab: "00010e01"
+        co_name: "__new__"
+        co_names: 
+          - "update"
+          - "type"
+        co_nlocals: 4
+        co_posonlyargcount: 0
+        co_stacksize: 4
+        co_varnames: 
+          - "cls"
+          - "name"
+          - "bases"
+          - "dct"
+  s: 33

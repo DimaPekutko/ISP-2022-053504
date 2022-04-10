@@ -41,3 +41,13 @@ config.ini:
 source_file = "data.toml"
 to_file = "data.yaml"
 ```
+
+## Tests
+Run tests from rom root directory:
+```bash
+coverage run --source=./pekutko_serializer -m unittest discover ./tests
+```
+Code coverage report:
+```bash
+coverage report
+```

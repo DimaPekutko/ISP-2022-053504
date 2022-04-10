@@ -1,39 +1,64 @@
-DTO_TYPE = "func"
-name = "test"
+DTO_TYPE = "class"
+name = "Meta228"
 
-[globals]
+[fields]
 DTO_TYPE = "dict"
-glob = 2
+__doc__ = {}
+__module__ = "__main__"
+s = 33
 
-[code]
+[fields.__bases__]
+DTO_TYPE = "list"
+
+[fields.__bases__.__dto__list_dict_item0]
+DTO_TYPE = "class"
+name = "type"
+
+[fields.__bases__.__dto__list_dict_item0.fields]
+DTO_TYPE = "dict"
+__bases__ = []
+
+[fields.__new__]
+DTO_TYPE = "func"
+name = "__new__"
+
+[fields.__new__.globals]
+DTO_TYPE = "dict"
+
+[fields.__new__.code]
 DTO_TYPE = "code"
 
-[code.fields]
+[fields.__new__.code.fields]
 DTO_TYPE = "dict"
-co_argcount = 1
+co_argcount = 4
 co_cellvars = []
-co_code = "64017400170064011700640114005300"
+co_code = "7c03a000640164026901a101010074017c017c027c0383035300"
 co_filename = "/home/dkefir03/labs/ISP-2022-053504/main.py"
-co_firstlineno = 29
+co_firstlineno = 52
 co_flags = 67
 co_freevars = []
 co_kwonlyargcount = 0
-co_lnotab = "0004"
-co_name = "test"
-co_nlocals = 1
+co_lnotab = "00010e01"
+co_name = "__new__"
+co_nlocals = 4
 co_posonlyargcount = 0
-co_stacksize = 2
+co_stacksize = 4
 
-[code.fields.co_consts]
+[fields.__new__.code.fields.co_consts]
 DTO_TYPE = "list"
 __dto__list_dict_item0 = {}
-__dto__list_dict_item1 = 2
+__dto__list_dict_item1 = "a"
+__dto__list_dict_item2 = 228
 
-[code.fields.co_names]
+[fields.__new__.code.fields.co_names]
 DTO_TYPE = "list"
-__dto__list_dict_item0 = "glob"
+__dto__list_dict_item0 = "update"
+__dto__list_dict_item1 = "type"
 
-[code.fields.co_varnames]
+[fields.__new__.code.fields.co_varnames]
 DTO_TYPE = "list"
-__dto__list_dict_item0 = "arg1"
+__dto__list_dict_item0 = "cls"
+__dto__list_dict_item1 = "name"
+__dto__list_dict_item2 = "bases"
+__dto__list_dict_item3 = "dct"
 
