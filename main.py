@@ -90,21 +90,24 @@ s1 = json_ser.dumps(obj)
 s2 = toml_ser.dumps(obj)
 s3 = yaml_ser.dumps(obj)
 
-open("data.json", "w").write(s1)
+# open("data.json", "w").write(s1)
 open("data.toml", "w").write(s2)
 open("data.yaml", "w").write(s3)
 
 # g = 228
 
 
-res1 = json_ser.loads(s1)
+# res1 = json_ser.loads(s1)
 res2 = toml_ser.loads(s2)
 res3 = yaml_ser.loads(s3)
 # print("_____MAIN_____")
 
-print(res1(2))
+# print(res1(2))
 print(res2(2))
 print(res3(2))
+
+o = json_ser.load("data.json")
+print(o(2,3))
 
 # print()
 # print("JSON")

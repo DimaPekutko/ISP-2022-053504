@@ -3,9 +3,9 @@ import inspect
 import re
 from types import CodeType, FunctionType, ModuleType
 
-from pekutko_serializer.dto import DTO, DTO_TYPES
-import pekutko_serializer.parser.json.json_tokens as TOKEN_TYPES
-
+from ...dto import DTO, DTO_TYPES
+from . import json_tokens
+TOKEN_TYPES = json_tokens
 
 class JsonParser():
 

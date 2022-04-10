@@ -3,10 +3,10 @@ import imp
 import inspect
 from types import BuiltinFunctionType, CodeType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
 from ..BaseSerializer import BaseSerializer
-from pekutko_serializer.parser.json.JsonParser import JsonParser
-from pekutko_serializer.dto import DTO, DTO_TYPES
+from ...parser.json.JsonParser import JsonParser
+from ...dto import DTO, DTO_TYPES
 
-from pekutko_serializer import utils
+from ... import utils
 
 class JsonSerializer(BaseSerializer):
     __res_str = ""

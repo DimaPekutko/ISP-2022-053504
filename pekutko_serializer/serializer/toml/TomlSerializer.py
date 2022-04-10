@@ -1,10 +1,9 @@
-
 import inspect
 import re
 from types import BuiltinFunctionType, CodeType, GetSetDescriptorType, MappingProxyType, MethodDescriptorType, ModuleType, WrapperDescriptorType
-from pekutko_serializer import utils
-from pekutko_serializer.parser.toml.TomlParser import TomlParser
-from pekutko_serializer.dto import DTO, DTO_TYPES
+from ... import utils
+from ...parser.toml.TomlParser import TomlParser
+from ...dto import DTO, DTO_TYPES
 from ..BaseSerializer import BaseSerializer
 
 

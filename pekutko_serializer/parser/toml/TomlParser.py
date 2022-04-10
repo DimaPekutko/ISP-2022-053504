@@ -3,9 +3,9 @@ import inspect
 import re
 from types import CodeType, FunctionType, ModuleType
 
-from pekutko_serializer.dto import DTO, DTO_TYPES
-import pekutko_serializer.parser.toml.toml_tokens as TOKEN_TYPES
-
+from ...dto import DTO, DTO_TYPES
+from . import toml_tokens
+TOKEN_TYPES = toml_tokens
 
 class TomlParser():
 

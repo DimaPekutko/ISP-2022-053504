@@ -3,7 +3,7 @@ import os
 import sys
 import configparser
 
-from pekutko_serializer.serializer import create_serializer
+from ..serializer import create_serializer
 
 class CLI:
     __parser = None

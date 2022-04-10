@@ -1,13 +1,10 @@
 import imp
-import inspect
 import re
 from types import CodeType, FunctionType, ModuleType
 
-from requests import head
-
-from pekutko_serializer.dto import DTO, DTO_TYPES
-import pekutko_serializer.parser.yaml.yaml_tokens as TOKEN_TYPES
-
+from ...dto import DTO, DTO_TYPES
+from . import yaml_tokens
+TOKEN_TYPES = yaml_tokens
 
 class YamlParser():
 
