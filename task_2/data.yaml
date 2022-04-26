@@ -1,0 +1,36 @@
+DTO_TYPE: "func"
+name: "f"
+globals:
+  DTO_TYPE: "dict"
+  math: 
+    DTO_TYPE: "module"
+    name: "math"
+    fields: null
+  c: 42
+code: 
+  DTO_TYPE: "code"
+  fields:
+    DTO_TYPE: "dict"
+    co_argcount: 1
+    co_cellvars: []
+    co_code: "64017d017400a0017c007c01140074021400a1015300"
+    co_consts: 
+      - null
+      - 123
+    co_filename: "/home/dkefir03/labs/ISP-2022-053504/main.py"
+    co_firstlineno: 71
+    co_flags: 67
+    co_freevars: []
+    co_kwonlyargcount: 0
+    co_lnotab: "00010401"
+    co_name: "f"
+    co_names: 
+      - "math"
+      - "sin"
+      - "c"
+    co_nlocals: 2
+    co_posonlyargcount: 0
+    co_stacksize: 4
+    co_varnames: 
+      - "x"
+      - "a"
